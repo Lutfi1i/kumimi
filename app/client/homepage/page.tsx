@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
-import { gsap } from "gsap";
 
 // Dummy data for featured manga
 const featuredManga = [
@@ -13,30 +12,7 @@ const featuredManga = [
 ];
 
 export default function Home() {
-  useEffect(() => {
-    // GSAP animation for the hero section
-    gsap.fromTo(
-      ".hero-title",
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-    );
-    gsap.fromTo(
-      ".hero-description",
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power3.out", delay: 0.3 }
-    );
-    gsap.fromTo(
-      ".hero-button",
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power3.out", delay: 0.6 }
-    );
-    gsap.fromTo(
-      ".featured-manga-card",
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)", stagger: 0.2, delay: 1 }
-    );
-  }, []);
-
+  
   return (
     <div className="min-h-screen bg-gray-950 text-white font-sans overflow-x-hidden">
       {/* Hero Section */}
