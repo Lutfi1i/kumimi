@@ -15,7 +15,6 @@ export default function Home() {
   
   return (
     <div className="min-h-screen bg-gray-950 text-white font-sans overflow-x-hidden">
-      {/* Hero Section */}
       <section
         className="relative h-screen flex items-center justify-center text-center bg-cover bg-center"
         style={{ backgroundImage: "url('https://picsum.photos/id/204/1600/900')" }} // External Placeholder background image
