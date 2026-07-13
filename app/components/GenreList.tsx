@@ -1,6 +1,5 @@
-"use client";
+import React from "react";
 
-import { useRef } from "react";
 
 type Comic = {
     rank: number;
@@ -12,9 +11,6 @@ type Comic = {
     type: string;
     rating: number;
 };
-
-const trendingSelector: string[] = ["Trending", "Popular"];
-
 
 const trending: Comic[] = [
     { rank: 1, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.9, hue: ["#10b981", "#022c22"] },
@@ -29,99 +25,41 @@ const trending: Comic[] = [
     { rank: 10, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.0, hue: ["#10b981", "#022c22"] },
 ];
 
-export default function Home() {
-    const scrollRef = useRef<HTMLDivElement | null>(null);
+export default function GenreList() {
+    const genres: string[] = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu", "Selesai"];
 
-    const handleScroll = (direction: "left" | "right") => {
-        if (!scrollRef.current) return;
-
-        const container = scrollRef.current;
-
-        // ambil 1 card
-        const card = container.querySelector("a");
-
-        if (!card) return;
-
-        const cardWidth = card.clientWidth;
-        const gap = 16;
-
-        const scrollPerClick = (cardWidth + gap) * 5;
-
-        const scrollAmount =
-            direction === "left" ? -scrollPerClick : scrollPerClick;
-
-        container.scrollBy({
-            left: scrollAmount,
-            behavior: "smooth",
-        });
-    };
     return (
-        <section className="relative flex flex-1 flex-col justify-center">
-            <div className="flex flex-col gap-2">
-                <div className="flex w-full items-center justify-between">
-                    <h1 className="text-2xl font-bold text-zinc-950">
-                        Sedang Trending & Populer
-                    </h1>
-
-                    <button className="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition">
-                        Lihat Semua <span className="ml-1 text-zinc-400 text-[18px]">→</span>
-                    </button>
-                </div>
-
-                <div className="flex flex-wrap gap-2.5 pb-3">
-                    {trendingSelector.map((g) => (
-                        <button
-                            key={g}
-                            className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 border cursor-pointer
-                        ${g === "Trending"
-                                    ? "bg-zinc-950 text-white shadow-sm shadow-emerald-500/20"
-                                    : "bg-gray-200 border-gray-200 hover:bg-gray-300 hover:text-gray-900 hover:border-gray-300"
-                                }`}
-                        >
-                            {g}
-                        </button>
-                    ))}
-                </div>
-
+        <section className="py-2">
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold tracking-tight text-zinc-900 flex items-center gap-2">
+                    Jadwal Update
+                </h2>
             </div>
 
-            <button
-                onClick={() => handleScroll('left')}
-                className="absolute left-0 md:left-0 top-1/2 -translate-y-1/2 z-20 bg-zinc-950 hover:bg-zinc-800 p-1 rounded-full shadow-lg"
-            >
-                <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <button
-                onClick={() => handleScroll('right')}
-                className="absolute right-0 md:right-0 top-1/2 -translate-y-1/2 z-20 bg-zinc-950 hover:bg-zinc-800 p-1 rounded-full shadow-lg"
-            >
-                <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-            <div
-                ref={scrollRef}
-                className="no-scrollbar flex gap-5 overflow-x-auto pb-4"
-            >
+            <div className="flex flex-wrap gap-2.5 pb-3">
+                {genres.map((g) => (
+                    <button
+                        key={g}
+                        className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 border cursor-pointer
+                        ${g === "Senin"
+                                ? "bg-zinc-950 text-white shadow-sm shadow-emerald-500/20"
+                                : "bg-gray-200 border-gray-200 hover:bg-gray-300 hover:text-gray-900 hover:border-gray-300"
+                            }`}
+                    >
+                        {g}
+                    </button>
+                ))}
+            </div>
+            
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 ">
                 {trending.map((c) => (
                     <a
                         key={c.rank}
                         href="#"
-                        className="group w-[200px] shrink-0 md:w-[220px]"
+                        className="group w-[200px] shrink-0 md:w-[220px] pb-4"
                     >
 
                         <div className="relative w-full overflow-hidden rounded-md bg-zinc-200 shadow-sm transition-all duration-300 group-hover:shadow-xl">
-
                             <img
                                 src={c.image}
                                 alt={c.title}
@@ -157,5 +95,5 @@ export default function Home() {
                 ))}
             </div>
         </section>
-    )
+    );
 }

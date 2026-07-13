@@ -2,32 +2,32 @@
 
 import { useRef } from "react";
 
-type Comic = {
-    rank: number;
+interface MangaCard {
+    id: number;
     title: string;
-    genre: string;
     chapter: string;
-    hue: [string, string];
-    image: string;
-    type: string;
-    rating: number;
-};
+    rating: string;
+    type: "Manhwa" | "Manga" | "Manhua";
+    genre: string;
+    image?: string;
+}
 
-const trendingSelector: string[] = ["Trending", "Popular"];
+const genreSelector: string[] = ["Action", "Romance", "Fantasy", "Isekai", "Horror", "Slice of Life", "Sci-Fi"];
 
 
-const trending: Comic[] = [
-    { rank: 1, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.9, hue: ["#10b981", "#022c22"] },
-    { rank: 2, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.8, hue: ["#10b981", "#022c22"] },
-    { rank: 3, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.7, hue: ["#10b981", "#022c22"] },
-    { rank: 4, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.6, hue: ["#10b981", "#022c22"] },
-    { rank: 5, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.5, hue: ["#10b981", "#022c22"] },
-    { rank: 6, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.4, hue: ["#10b981", "#022c22"] },
-    { rank: 7, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.3, hue: ["#10b981", "#022c22"] },
-    { rank: 8, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.2, hue: ["#10b981", "#022c22"] },
-    { rank: 9, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.1, hue: ["#10b981", "#022c22"] },
-    { rank: 10, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.0, hue: ["#10b981", "#022c22"] },
+const popularData: MangaCard[] = [
+    { id: 1, image: "/poster-manhwa-TWATF.jpeg", title: "Pedang Terakhir", chapter: "Ch. 142", rating: "4.9", genre: "Action", type: "Manhwa" },
+    { id: 2, image: "/poster-manhwa-TWATF.jpeg", title: "Solo Leveling Next", chapter: "Ch. 24", rating: "4.8", genre: "Fantasy", type: "Manhwa" },
+    { id: 3, image: "/poster-manhwa-TWATF.jpeg", title: "Return of the King", chapter: "Ch. 89", rating: "4.7", genre: "Adventure", type: "Manhua" },
+    { id: 4, image: "/poster-manhwa-TWATF.jpeg", title: "Demon Slayer Spin-off", chapter: "Ch. 05", rating: "4.9", genre: "Action", type: "Manga" },
+    { id: 5, image: "/poster-manhwa-TWATF.jpeg", title: "Isekai Labyrinth", chapter: "Ch. 61", rating: "4.5", genre: "Isekai", type: "Manga" },
+    { id: 6, image: "/poster-manhwa-TWATF.jpeg", title: "Pedang Terakhir", chapter: "Ch. 142", rating: "4.9", genre: "Action", type: "Manhwa" },
+    { id: 7, image: "/poster-manhwa-TWATF.jpeg", title: "Solo Leveling Next", chapter: "Ch. 24", rating: "4.8", genre: "Fantasy", type: "Manhwa" },
+    { id: 8, image: "/poster-manhwa-TWATF.jpeg", title: "Return of the King", chapter: "Ch. 89", rating: "4.7", genre: "Adventure", type: "Manhua" },
+    { id: 9, image: "/poster-manhwa-TWATF.jpeg", title: "Demon Slayer Spin-off", chapter: "Ch. 05", rating: "4.9", genre: "Action", type: "Manga" },
+    { id: 10, image: "/poster-manhwa-TWATF.jpeg", title: "Isekai Labyrinth", chapter: "Ch. 61", rating: "4.5", genre: "Isekai", type: "Manga" },
 ];
+
 
 export default function Home() {
     const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -57,10 +57,11 @@ export default function Home() {
     };
     return (
         <section className="relative flex flex-1 flex-col justify-center">
+            
             <div className="flex flex-col gap-2">
                 <div className="flex w-full items-center justify-between">
                     <h1 className="text-2xl font-bold text-zinc-950">
-                        Sedang Trending & Populer
+                        Trending Di Dalam Genre nya
                     </h1>
 
                     <button className="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition">
@@ -69,11 +70,11 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-wrap gap-2.5 pb-3">
-                    {trendingSelector.map((g) => (
+                    {genreSelector.map((g) => (
                         <button
                             key={g}
                             className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 border cursor-pointer
-                        ${g === "Trending"
+                        ${g === "Action"
                                     ? "bg-zinc-950 text-white shadow-sm shadow-emerald-500/20"
                                     : "bg-gray-200 border-gray-200 hover:bg-gray-300 hover:text-gray-900 hover:border-gray-300"
                                 }`}
@@ -113,9 +114,9 @@ export default function Home() {
                 ref={scrollRef}
                 className="no-scrollbar flex gap-5 overflow-x-auto pb-4"
             >
-                {trending.map((c) => (
+                {popularData.map((c) => (
                     <a
-                        key={c.rank}
+                        key={c.id}
                         href="#"
                         className="group w-[200px] shrink-0 md:w-[220px]"
                     >
@@ -136,9 +137,6 @@ export default function Home() {
                                 ⭐ {c.rating}
                             </span>
 
-                            <span className="absolute left-2 top-2 text-5xl font-black text-white/20">
-                                {c.rank}
-                            </span>
                             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 to-transparent p-3 pt-8 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                                 <p className="text-[14px] font-semibold text-white">{c.genre}</p>
                             </div>
