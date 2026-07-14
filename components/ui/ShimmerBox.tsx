@@ -15,7 +15,7 @@ export function ShimmerBox({ className }: ShimmerBoxProps) {
       )}
       style={{
         background:
-          "linear-gradient(90deg, #ede0c8 25%, #f7efde 50%, #ede0c8 75%)",
+          "linear-gradient(90deg, #c8c8c8 25%, #dadada 50%, #c8c8c8 75%)",
         backgroundSize: "600px 100%",
         animation: "shimmer 1.6s infinite linear",
       }}

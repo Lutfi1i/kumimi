@@ -1,4 +1,3 @@
-import { ShimmerBox } from "@/components/ui/ShimmerBox";
 import type { RankedManga, RecentManga } from "@/types/manga";
 import { cn } from "@/lib/utils";
 import { Star, Clock } from "lucide-react";
@@ -18,9 +17,9 @@ function SidebarSection({
     <div className="mb-8">
       <h3
         className={cn(
-          "font-display text-base font-bold text-ink",
+          "font-display text-[18px] font-bold text-ink",
           "flex items-center gap-2 mb-3 pb-2",
-          "border-b-2 border-gold-muted"
+          "border-b-2 border-border"
         )}
       >
         {icon}
@@ -43,7 +42,7 @@ function getSmallAbstractCover(mangaId: number, title: string) {
     "from-cyan-500 to-blue-600",
   ];
   const grad = gradients[mangaId % gradients.length];
-  const initials = title.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+  const initials = title.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
   return (
     <div className={cn("w-full h-full bg-gradient-to-br flex items-center justify-center relative overflow-hidden select-none", grad)}>
@@ -61,10 +60,7 @@ interface RankingListProps {
 
 export function RankingList({ mangas }: RankingListProps) {
   return (
-    <SidebarSection
-      icon={<Star size={14} fill="#d4b870" stroke="none" />}
-      title="Peringkat Teratas"
-    >
+    <SidebarSection icon={<Star size={14} fill="#000000" stroke="none" />} title="Peringkat Teratas">
       <ul className="flex flex-col gap-2">
         {mangas.map((manga) => (
           <li key={manga.id}>
@@ -79,7 +75,7 @@ export function RankingList({ mangas }: RankingListProps) {
               <span
                 className={cn(
                   "font-display text-lg font-black w-5 text-center shrink-0",
-                  manga.rank <= 3 ? "text-gold" : "text-gold-muted"
+                  manga.rank <= 3 ? "text-ink" : "text-ink-muted"
                 )}
               >
                 {manga.rank}
@@ -89,11 +85,7 @@ export function RankingList({ mangas }: RankingListProps) {
               <div className="w-10 h-14 rounded-md overflow-hidden shrink-0">
                 {manga.coverUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={manga.coverUrl}
-                    alt={manga.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={manga.coverUrl} alt={manga.title} className="w-full h-full object-cover" />
                 ) : (
                   getSmallAbstractCover(manga.id, manga.title)
                 )}
@@ -101,11 +93,9 @@ export function RankingList({ mangas }: RankingListProps) {
 
               {/* Info */}
               <div className="min-w-0 flex-1">
-                <p className="text-[0.75rem] font-semibold text-ink truncate">
-                  {manga.title}
-                </p>
+                <p className="text-[0.75rem] font-semibold text-ink truncate">{manga.title}</p>
                 <p className="text-[0.68rem] text-ink-muted mt-0.5">
-                  Ch. {manga.chapter}
+                  {manga.chapter > 0 ? `Ch. ${manga.chapter}` : null}
                 </p>
               </div>
             </Link>
@@ -123,10 +113,7 @@ interface RecentListProps {
 
 export function RecentList({ mangas }: RecentListProps) {
   return (
-    <SidebarSection
-      icon={<Clock size={14} stroke="#8b6914" />}
-      title="Baru Diperbarui"
-    >
+    <SidebarSection icon={<Clock size={14} stroke="#000000" />} title="Baru Diperbarui">
       <ul className="flex flex-col gap-2">
         {mangas.map((manga) => (
           <li key={manga.id}>
@@ -141,11 +128,7 @@ export function RecentList({ mangas }: RecentListProps) {
               <div className="w-12 h-16 rounded-md overflow-hidden shrink-0">
                 {manga.coverUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={manga.coverUrl}
-                    alt={manga.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={manga.coverUrl} alt={manga.title} className="w-full h-full object-cover" />
                 ) : (
                   getSmallAbstractCover(manga.id, manga.title)
                 )}
@@ -153,15 +136,11 @@ export function RecentList({ mangas }: RecentListProps) {
 
               {/* Info */}
               <div className="min-w-0 flex-1">
-                <p className="text-[0.78rem] font-semibold text-ink truncate">
-                  {manga.title}
+                <p className="text-[0.78rem] font-semibold text-ink truncate">{manga.title}</p>
+                <p className="text-[0.72rem] text-ink font-semibold mt-0.5">
+                  {manga.chapter > 0 ? `Chapter ${manga.chapter}` : null}
                 </p>
-                <p className="text-[0.72rem] text-gold font-semibold mt-0.5">
-                  Chapter {manga.chapter}
-                </p>
-                <p className="text-[0.68rem] text-ink-muted mt-0.5">
-                  {manga.updatedAt}
-                </p>
+                <p className="text-[0.68rem] text-ink-muted mt-0.5">{manga.updatedAt}</p>
               </div>
             </Link>
           </li>

@@ -1,15 +1,15 @@
-import { ShimmerBox } from "@/components/ui/ShimmerBox";
 import { MangaBadge } from "@/components/ui/MangaBadge";
 import type { Manga } from "@/types/manga";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 interface MangaCardProps {
   manga: Manga;
-  style?: any;
+  style?: CSSProperties;
 }
 
-function getAbstractCover(mangaId: number, title: string, genre?: string) {
+export function getAbstractCover(mangaId: number, title: string, genre?: string) {
   const gradients = [
     "from-indigo-600 to-cyan-500",
     "from-purple-600 to-pink-500",
@@ -27,7 +27,7 @@ function getAbstractCover(mangaId: number, title: string, genre?: string) {
     <div className={cn("w-full h-full bg-gradient-to-br flex flex-col justify-between p-3 relative overflow-hidden select-none", grad)}>
       <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full translate-x-6 -translate-y-6 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-16 h-16 bg-black/10 rotate-45 translate-y-6 -translate-x-6 pointer-events-none" />
-      
+
       <div className="flex items-center justify-between z-10">
         <span className="text-[8px] tracking-widest text-white/50 font-bold uppercase font-mono">
           KUMIMI SELECT
@@ -58,18 +58,16 @@ function getAbstractCover(mangaId: number, title: string, genre?: string) {
 export function MangaCard({ manga, style }: MangaCardProps) {
   return (
     <Link
-      href={`/comic/${manga.id}`}
+      href={`/comic/${manga.slug ?? manga.id}`}
       className="group flex flex-col gap-2 cursor-pointer text-left"
       style={style}
     >
       {/* Cover */}
       <div
         className={cn(
-          "relative w-full aspect-3/4 rounded-lg overflow-hidden",
-          "shadow-[0_4px_16px_rgba(90,60,10,0.12)]",
+          "relative w-full aspect-3/4 rounded-lg overflow-hidden border border-border",
           "transition-all duration-300",
-          "group-hover:-translate-y-1.5 group-hover:scale-[1.02]",
-          "group-hover:shadow-[0_12px_32px_rgba(90,60,10,0.22)]"
+          "group-hover:-translate-y-1.5 group-hover:scale-[1.02]"
         )}
       >
         <MangaBadge type={manga.badge} />
@@ -96,9 +94,10 @@ export function MangaCard({ manga, style }: MangaCardProps) {
           {manga.title}
         </p>
         <p className="text-[0.7rem] text-ink-muted mt-0.5">
-          Ch. {manga.chapter}
+          {manga.chapter > 0 ? `Ch. ${manga.chapter}` : null}
         </p>
       </div>
     </Link>
   );
 }
+

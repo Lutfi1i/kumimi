@@ -7,6 +7,7 @@ export interface Manga {
   badge: BadgeType;
   coverUrl?: string;
   genre?: string;
+  slug?: string;
 }
 
 export interface RecentManga extends Manga {
@@ -15,4 +16,22 @@ export interface RecentManga extends Manga {
 
 export interface RankedManga extends Manga {
   rank: number;
+}
+
+export interface ChapterInfo {
+  chapterNumber: number;
+  chapterUrl: string;
+  title: string | null;
+  slug: string;
+}
+
+export interface MangaDetail {
+  title: string;
+  coverUrl?: string;
+  synopsis: string;
+  genres: string[];
+  status: "ongoing" | "completed";
+  type: "Manga" | "Manhwa" | "Manhua";
+  slug: string;
+  chapters: ChapterInfo[];
 }

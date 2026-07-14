@@ -20,13 +20,12 @@ export function Navbar() {
   const [searchFocused, setSearchFocused] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-border">
+    <nav className="sticky top-0 z-50 bg-canvas border-b border-border">
       <div className="max-w-7xl mx-auto px-5 h-15 flex items-center justify-between gap-4">
-
         {/* Logo */}
         <Link
           href="/"
-          className="font-display text-2xl font-black text-gold tracking-tight shrink-0"
+          className="font-display text-[22px] font-black text-ink tracking-tight shrink-0"
         >
           Kumimi
         </Link>
@@ -38,10 +37,10 @@ export function Navbar() {
               <Link
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors duration-150",
+                  "font-label text-[11px] transition-opacity duration-150",
                   link.active
-                    ? "text-gold font-semibold"
-                    : "text-ink-muted hover:text-gold"
+                    ? "text-ink font-bold"
+                    : "text-ink/70 hover:opacity-60"
                 )}
               >
                 {link.label}
@@ -70,9 +69,9 @@ export function Navbar() {
               onBlur={() => setSearchFocused(false)}
               className={cn(
                 "w-full bg-card border border-border rounded-lg",
-                "pl-8 pr-3 py-1.5 text-sm text-ink placeholder:text-ink-muted",
-                "font-body outline-none transition-all duration-200",
-                "focus:border-gold focus:bg-warm-white"
+                "pl-8 pr-3 py-1.5 text-[13px] text-ink placeholder:text-ink-muted",
+                "outline-none transition-all duration-200",
+                "focus:border-ink focus:bg-warm-white"
               )}
             />
           </div>
@@ -81,10 +80,10 @@ export function Navbar() {
           <Link
             href="/client/register"
             className={cn(
-              "hidden sm:inline-flex items-center",
-              "bg-gold hover:bg-gold-dark text-white",
-              "text-sm font-semibold px-4 py-1.5 rounded-lg",
-              "transition-all duration-150 hover:-translate-y-px"
+              "hidden sm:inline-flex items-center justify-center",
+              "bg-ink hover:bg-[#1a1a1a] text-white",
+              "text-[13px] font-bold h-9 px-[15px] rounded-[64px]",
+              "transition-all duration-150"
             )}
           >
             Gabung
@@ -92,7 +91,7 @@ export function Navbar() {
 
           {/* Mobile menu toggle */}
           <button
-            className="lg:hidden p-1.5 text-ink-muted hover:text-gold transition-colors"
+            className="lg:hidden p-1.5 text-ink-muted hover:text-ink transition-colors"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -103,14 +102,14 @@ export function Navbar() {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <div className="lg:hidden border-t border-border bg-cream px-5 py-4 flex flex-col gap-3">
+        <div className="lg:hidden border-t border-border bg-canvas px-5 py-4 flex flex-col gap-3">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm font-medium py-1",
-                link.active ? "text-gold font-semibold" : "text-ink-muted"
+                "text-[13px] font-medium py-1",
+                link.active ? "text-ink font-bold" : "text-ink-muted"
               )}
               onClick={() => setMenuOpen(false)}
             >
@@ -123,12 +122,12 @@ export function Navbar() {
               <input
                 type="text"
                 placeholder="Cari komik..."
-                className="w-full bg-card border border-border rounded-lg pl-8 pr-3 py-1.5 text-sm text-ink placeholder:text-ink-muted outline-none focus:border-gold"
+                className="w-full bg-card border border-border rounded-lg pl-8 pr-3 py-1.5 text-[13px] text-ink placeholder:text-ink-muted outline-none focus:border-ink"
               />
             </div>
             <Link
-              href="/join"
-              className="bg-gold text-white text-sm font-semibold px-4 py-1.5 rounded-lg"
+              href="/client/register"
+              className="bg-ink text-white text-[13px] font-bold px-[15px] py-2 rounded-[64px]"
             >
               Gabung
             </Link>
