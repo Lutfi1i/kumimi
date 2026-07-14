@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Login() {
     return (
         <div className="flex h-screen bg-white justify-between items-center gap-10 overflow-hidden">
@@ -10,7 +12,7 @@ export default function Login() {
                             </span>
                         </div>
                         <div className="flex items-center gap-4 text-sm">
-                            <a href="/" className="text-gray-500 hover:text-[#825d21] font-semibold" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+                            <a href="#" className="text-gray-500 hover:text-[#825d21] font-semibold" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
                                 Home
                             </a>
                             <a href="/register" className="text-[#36656B] font-semibold hover:text-green-700" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
@@ -90,7 +92,7 @@ export default function Login() {
                             </button>
                         </div>
                         <div className="flex justify-center items-center text-sm gap-2">
-                            <span className="text-gray-700" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>Don't have an Account?</span>
+                            <span className="text-gray-700" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>Don`&apos;`t have an Account?</span> 
                             <a href="/register">
                                 <button className="text-[#825d21] cursor-pointer font-semibold transition-all duration-300 hover:-translate-y-1">
                                     Sign Up
@@ -103,7 +105,7 @@ export default function Login() {
 
             <div className="hidden md:block lg:block w-full md:w-1/2 animate-slide-in-right">
                 <div className="relative h-full flex justify-end">
-                    <img
+                    <Image
                         className='w-full h-screen object-cover'
                         src="../login-page-image.png"
                         alt=""
