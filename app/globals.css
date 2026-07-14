@@ -1,47 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+/* WEBTOON design tokens — sourced from the Figma style reference.
+   Measured values only; do not invent tokens. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #d4d4d4;
+  --foreground: #000000;
 }
 
-@theme {
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Outfit', var(--font-geist-sans), sans-serif;
+
+  /* Core palette */
+  --color-canvas: #d4d4d4;
+  --color-ink: #000000;
+  --color-ink-muted: #4d4d4d;
+  --color-ink-soft: #3a3a3a;
+  --color-surface-tint: #c8c8c8;
+  --color-accent-secondary: #f3f4f5;
+
+  /* Legacy Kumimi tokens repointed to WEBTOON values (cross-page consistency) */
+  --color-cream: #d4d4d4;
+  --color-card: #c8c8c8;
+  --color-border: #b3b3b3;
+  --color-warm-white: #f3f4f5;
+  --color-gold: #000000;
+  --color-gold-dark: #000000;
+  --color-gold-muted: #8a8a8a;
+
+  /* Typography */
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-label: "Times New Roman", Times, serif;
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-
-  --color-cream: #faf7f2;
-  --color-warm-white: #fdfaf2;
-  --color-ink: #18181b;
-  --color-ink-muted: #71717a;
-  --color-ink-soft: #3f3f46;
-  --color-gold: #b38a3e;
-  --color-gold-dark: #8c6827;
-  --color-gold-muted: #c9a35e;
-  --color-border: #e4e4e7;
-  --color-card: #ffffff;
-
-  --animate-marquee: marquee 35s linear infinite;
-  @keyframes marquee {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-50%, 0, 0); }
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Animations */
 @layer utilities {
   .animate-slide-in-left {
     animation: slideInLeft 0.8s ease-out;
   }
-  
+
   .animate-slide-in-right {
     animation: slideInRight 0.8s ease-out;
   }
@@ -69,8 +69,31 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -600px 0;
+  }
+  100% {
+    background-position: 600px 0;
+  }
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
