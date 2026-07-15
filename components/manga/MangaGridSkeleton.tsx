@@ -3,7 +3,7 @@
 import { ShimmerBox } from "@/components/ui/ShimmerBox";
 import { SectionHeader } from "./MangaGrid";
 import { cn } from "@/lib/utils";
-import { GENRES } from "@/lib/mock-data";
+import { GENRES } from "@/lib/genres";
 
 export function MangaCardSkeleton() {
   return (
@@ -27,14 +27,14 @@ interface MangaGridSkeletonProps {
 
 export function MangaGridSkeleton({ title, count = 14, showGenrePills = false }: MangaGridSkeletonProps) {
   return (
-    <div className="mb-10">
+    <div className="mb-8">
       {showGenrePills && (
         <div className="flex gap-2 flex-wrap mb-5">
-          {GENRES.map((genre, i) => (
+          {GENRES.map((g, i) => (
             <div
-              key={genre}
+              key={g.label}
               className={cn(
-                "h-[30px] rounded-full overflow-hidden",
+                "h-[34px] rounded-full overflow-hidden",
                 i === 0 ? "w-16" : "w-20"
               )}
             >
@@ -44,8 +44,10 @@ export function MangaGridSkeleton({ title, count = 14, showGenrePills = false }:
         </div>
       )}
 
-      <SectionHeader title={title} />
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 md:gap-4">
+      <div className="flex items-baseline justify-between mb-4">
+        <div className="h-[26px] w-40 rounded-lg overflow-hidden"><ShimmerBox /></div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {Array.from({ length: count }).map((_, i) => (
           <MangaCardSkeleton key={i} />
         ))}

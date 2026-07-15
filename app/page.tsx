@@ -1,47 +1,87 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/manga/HeroSection";
+import { HeroSectionSkeleton } from "@/components/manga/HeroSectionSkeleton";
+import { GenreBrowse } from "@/components/manga/GenreBrowse";
 import { MangaGrid } from "@/components/manga/MangaGrid";
+import { MangaGridSkeleton } from "@/components/manga/MangaGridSkeleton";
 import { UpdateRow } from "@/components/manga/UpdateRow";
-import { RankingList, RecentList } from "@/components/sidebar/Sidebar";
+import { NowOnWebtoon } from "@/components/manga/NowOnWebtoon";
+import { NowOnWebtoonSkeleton } from "@/components/manga/NowOnWebtoonSkeleton";
+import { TrendingSeries } from "@/components/manga/TrendingSeries";
+import { TrendingSeriesSkeleton } from "@/components/manga/TrendingSeriesSkeleton";
+import { Suspense } from "react";
 import { fetchHomeData } from "@/lib/api";
 import { getMockMangas, getRankedMangas, getRecentMangas } from "@/lib/mock-data";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
+async function HeroSectionContent() {
   const data = await fetchHomeData();
+  const featuredMangas = data?.featured ?? getMockMangas(3);
+  return <HeroSection featured={featuredMangas} />;
+}
 
+async function TrendingSeriesContent() {
+  const data = await fetchHomeData();
   const popularMangas = data?.popular ?? getMockMangas(21);
-  const latestMangas = data?.latest ?? getMockMangas(14, 25);
-  const recommendedMangas = data?.recommended ?? getMockMangas(14, 40);
-  const featuredMangas = data?.featured ?? popularMangas.slice(0, 3);
-  const rankedMangas = data?.ranked ?? getRankedMangas(8);
-  const recentMangas = data?.recent ?? getRecentMangas(6);
+  const trendingMangas = data?.popular?.slice(0, 10) ?? getMockMangas(10);
+  return <TrendingSeries trending={trendingMangas} popular={popularMangas.slice(0, 10)} />;
+}
 
+async function GenreBrowseContent() {
+  const data = await fetchHomeData();
+  const popularMangas = data?.popular ?? getMockMangas(21);
+  return <GenreBrowse mangas={popularMangas} title="Populer" />;
+}
+
+async function UpdateRowContent() {
+  const data = await fetchHomeData();
+  const latestMangas = data?.latest ?? getMockMangas(14, 25);
+  return <UpdateRow title="Pembaruan Terbaru" mangas={latestMangas} />;
+}
+
+async function MangaGridContent() {
+  const data = await fetchHomeData();
+  const popularMangas = data?.popular ?? getMockMangas(21);
+  const recommendedMangas = data?.recommended ?? getMockMangas(14, 40);
+  return <MangaGrid title="Rekomendasi Untukmu" mangas={recommendedMangas} />;
+}
+
+export default function Home() {
   return (
     <>
       <Navbar />
-      <HeroSection featured={featuredMangas} />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-8 py-8">
-        <div className="flex gap-8 items-start">
-          {/* ── MAIN COLUMN ── */}
-          <main className="flex-1 min-w-0">
-            <UpdateRow title="Pembaruan Terbaru" mangas={latestMangas} />
+      <div className="w-full bg-white">
+        {/* Main container with responsive padding */}
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 lg:px-[120px] py-8">
+          {/* Hero Section */}
+          <Suspense fallback={<HeroSectionSkeleton />}>
+            <HeroSectionContent />
+          </Suspense>
 
-            <MangaGrid
-              title="Populer Minggu Ini"
-              mangas={popularMangas}
-              showGenrePills
-            />
-            <MangaGrid title="Rekomendasi Untukmu" mangas={recommendedMangas} />
-          </main>
+          {/* Trending & Popular Series */}
+          <Suspense fallback={<TrendingSeriesSkeleton />}>
+            <TrendingSeriesContent />
+          </Suspense>
 
-          {/* ── SIDEBAR ── */}
-          <aside className="hidden lg:block w-55 xl:w-60 shrink-0 sticky top-19">
-            <RankingList mangas={rankedMangas} />
-            <RecentList mangas={recentMangas} />
-          </aside>
+          {/* Additional sections - simplified layout without sidebar */}
+          <div className="space-y-8">
+            <Suspense fallback={<MangaGridSkeleton title="Populer" count={21} />}>
+              <GenreBrowseContent />
+            </Suspense>
+
+            <Suspense fallback={<MangaGridSkeleton title="Pembaruan Terbaru" count={14} />}>
+              <UpdateRowContent />
+            </Suspense>
+
+            <Suspense fallback={<MangaGridSkeleton title="Rekomendasi Untukmu" count={14} />}>
+              <MangaGridContent />
+            </Suspense>
+          </div>
+
+          {/* Last placeholder section */}
+          <div className="mb-8 h-[326px] bg-[#f5f5f5] rounded-lg" />
         </div>
       </div>
     </>

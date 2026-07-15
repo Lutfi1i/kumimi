@@ -8,6 +8,11 @@ export interface Manga {
   coverUrl?: string;
   genre?: string;
   slug?: string;
+  author?: string;
+  views?: string;
+  type?: "Manga" | "Manhwa" | "Manhua";
+  status?: string;
+  rating?: number;
 }
 
 export interface RecentManga extends Manga {

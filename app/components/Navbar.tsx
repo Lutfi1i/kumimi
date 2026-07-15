@@ -34,7 +34,7 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-[#0f0f14] border-b border-white/10">
+        <header className="sticky top-0 z-50 w-full border-b border-white/10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16 gap-4">
 
@@ -184,7 +184,7 @@ export default function Navbar() {
             </div>
 
             {mobileOpen && (
-                <div className="md:hidden border-t border-white/10 bg-[#0f0f14] px-4 py-4 space-y-1">
+                <div className="md:hidden border-t border-white/10 px-4 py-4 space-y-1">
                     <form onSubmit={handleSearchSubmit} className="mb-3">
                         <div className="relative w-full">
                             <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
