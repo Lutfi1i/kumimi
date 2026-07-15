@@ -65,7 +65,7 @@ export function MangaCard({ manga, style }: MangaCardProps) {
       {/* Cover */}
       <div
         className={cn(
-          "relative w-full aspect-3/4 rounded-lg overflow-hidden border border-border",
+          "relative w-full aspect-3/4 rounded-lg overflow-hidden border border-[#e0e0e0]",
           "transition-all duration-300",
           "group-hover:-translate-y-1.5 group-hover:scale-[1.02]"
         )}
@@ -86,16 +86,66 @@ export function MangaCard({ manga, style }: MangaCardProps) {
 
         {/* Bottom gradient overlay */}
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/30 to-transparent pointer-events-none" />
+
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+          <div className="space-y-2">
+            {/* Title */}
+            <h3 className="text-[13px] font-bold text-black line-clamp-2">
+              {manga.title}
+            </h3>
+
+            {/* Author */}
+            {manga.author && (
+              <p className="text-[11px] text-[#666] font-semibold">
+                {manga.author}
+              </p>
+            )}
+
+            {/* Chapter info */}
+            <div className="space-y-1">
+              {manga.chapter > 0 && (
+                <>
+                  <div className="inline-block bg-black/10 px-2 py-1 rounded-sm">
+                    <span className="text-[10px] font-bold text-black">
+                      #{manga.chapter}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-[#666]">
+                    Chapter {manga.chapter}: {manga.title}
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* View count or rating */}
+            {manga.views && (
+              <p className="text-[10px] text-[#999] font-semibold">
+                {manga.views}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Info */}
       <div>
-        <p className="text-[0.78rem] font-semibold text-ink leading-tight truncate">
+        <p className="text-[0.78rem] font-semibold text-black leading-tight truncate">
           {manga.title}
         </p>
-        <p className="text-[0.7rem] text-ink-muted mt-0.5">
-          {manga.chapter > 0 ? `Ch. ${manga.chapter}` : null}
-        </p>
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[0.7rem] text-[#666]">
+          {manga.type && (
+            <span className="text-[9px] font-bold bg-[#ffcb05]/15 text-[#bfa004] px-1.5 py-0.2 rounded-sm select-none shrink-0 font-mono">
+              {manga.type.toUpperCase()}
+            </span>
+          )}
+          {manga.chapter > 0 && <span className="font-semibold shrink-0">Ch. {manga.chapter}</span>}
+          {manga.author && (
+            <span className="truncate max-w-[80px]" title={manga.author}>
+              • {manga.author.split(",")[0]}
+            </span>
+          )}
+        </div>
       </div>
     </Link>
   );

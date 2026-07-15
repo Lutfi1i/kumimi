@@ -75,6 +75,8 @@ export default async function ComicDetailPage({
             <h1 className="font-display text-2xl md:text-3xl font-black text-ink">
               {title}
             </h1>
+            {/* Author */}
+            <h1 className="font-display text-xl font-bold text-ink mt-4">Eichiro Oda</h1>
             <div className="flex flex-wrap gap-2 mt-3">
               <span className="text-[0.7rem] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-gold/10 text-gold-dark">
                 {type}
@@ -86,6 +88,7 @@ export default async function ComicDetailPage({
             {synopsis && (
               <p className="text-sm text-ink-soft leading-relaxed mt-4">{synopsis}</p>
             )}
+
             {genres.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-4">
                 {genres.map((g) => (

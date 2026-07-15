@@ -10,26 +10,45 @@ const TITLES = [
   "Hope You're Happy", "Watashitachi Dayo", "Musunde A.Modern", "Tama of the Nation",
 ];
 
+const AUTHORS = [
+  "Gege Akutami", "Tsuguhito Yuki", "Tatsuki Fujimoto", "Akane Shimizu",
+  "Kuroe Karasuki", "Yukinobu Tatsu", "Yoh Yoshinari", "Ken Akamatsu",
+  "Junji Ito", "Ryoji Minagawa", "Takeshi Obata", "Yuu Iseki",
+  "Satsuki Yoshino", "Shunsuke Saijou", "Risa Goto", "Yumi Unita",
+];
+
 const BADGES = ["new", "hot", "update", null, null, "hot", "new", null, "update", null] as const;
 
 export function getMockMangas(count: number, offset = 0): Manga[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: offset + i + 1,
-    title: TITLES[(offset + i) % TITLES.length],
-    chapter: Math.floor(Math.random() * 200) + 1,
-    badge: BADGES[(offset + i) % BADGES.length],
-    genre: GENRES[((offset + i) % (GENRES.length - 1)) + 1],
-  }));
+  return Array.from({ length: count }, (_, i) => {
+    const views = Math.floor(Math.random() * 900) + 10;
+    const viewsText = views > 100 ? `${(views / 100).toFixed(1)}k` : views.toString();
+    return {
+      id: offset + i + 1,
+      title: TITLES[(offset + i) % TITLES.length],
+      chapter: Math.floor(Math.random() * 200) + 1,
+      badge: BADGES[(offset + i) % BADGES.length],
+      genre: GENRES[((offset + i) % (GENRES.length - 1)) + 1],
+      author: AUTHORS[(offset + i) % AUTHORS.length],
+      views: `${viewsText}`,
+    };
+  });
 }
 
 export function getRankedMangas(count = 8): RankedManga[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i + 1,
-    rank: i + 1,
-    title: TITLES[i % TITLES.length],
-    chapter: Math.floor(Math.random() * 200) + 1,
-    badge: null,
-  }));
+  return Array.from({ length: count }, (_, i) => {
+    const views = Math.floor(Math.random() * 900) + 10;
+    const viewsText = views > 100 ? `${(views / 100).toFixed(1)}k` : views.toString();
+    return {
+      id: i + 1,
+      rank: i + 1,
+      title: TITLES[i % TITLES.length],
+      chapter: Math.floor(Math.random() * 200) + 1,
+      badge: null,
+      author: AUTHORS[i % AUTHORS.length],
+      views: `${viewsText}`,
+    };
+  });
 }
 
 const RECENT_TIMES = [
@@ -38,13 +57,19 @@ const RECENT_TIMES = [
 ];
 
 export function getRecentMangas(count = 6): RecentManga[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i + 100,
-    title: TITLES[(i + 3) % TITLES.length],
-    chapter: Math.floor(Math.random() * 200) + 1,
-    badge: null,
-    updatedAt: RECENT_TIMES[i % RECENT_TIMES.length],
-  }));
+  return Array.from({ length: count }, (_, i) => {
+    const views = Math.floor(Math.random() * 900) + 10;
+    const viewsText = views > 100 ? `${(views / 100).toFixed(1)}k` : views.toString();
+    return {
+      id: i + 100,
+      title: TITLES[(i + 3) % TITLES.length],
+      chapter: Math.floor(Math.random() * 200) + 1,
+      badge: null,
+      updatedAt: RECENT_TIMES[i % RECENT_TIMES.length],
+      author: AUTHORS[(i + 3) % AUTHORS.length],
+      views: `${viewsText}`,
+    };
+  });
 }
 
 export const GENRES = [
@@ -56,11 +81,15 @@ export function getMangaById(id: number): Manga | undefined {
   const index = Math.abs(id - 1);
   const title = TITLES[index % TITLES.length];
   if (!title) return undefined;
+  const views = Math.floor(Math.random() * 900) + 10;
+  const viewsText = views > 100 ? `${(views / 100).toFixed(1)}k` : views.toString();
   return {
     id,
     title,
     chapter: Math.floor((Math.sin(id) * 100) + 120) || 50, // Deterministic chapter count
     badge: BADGES[index % BADGES.length],
     genre: GENRES[(index % (GENRES.length - 1)) + 1],
+    author: AUTHORS[index % AUTHORS.length],
+    views: `${viewsText}`,
   };
 }
