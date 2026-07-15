@@ -39,12 +39,41 @@ export function GenreBrowse({ mangas, title = "Populer" }: { mangas: Manga[]; ti
     const token = ++req.current;
     setLoading(true);
     setResults([]);
-    const data = await fetchGenreManga(genreSlug === "all" ? "all" : genreSlug, typeVal || undefined);
-    if (token === req.current) {
-      setResults(data);
-      setLoading(false);
+    try {
+      const data = await fetchGenreManga(genreSlug === "all" ? "all" : genreSlug, typeVal || undefined);
+      if (token === req.current) {
+        if (data && data.length > 0) {
+          setResults(data);
+        } else {
+          // Fallback to client-side filtering of initial mangas
+          const filtered = mangas.filter((m) => {
+            const matchesGenre = !genreSlug || genreSlug === "" || genreSlug === "all" || genreLabel === "Semua" ||
+              m.genre?.toLowerCase() === genreLabel.toLowerCase() || 
+              m.genre?.toLowerCase() === genreSlug.toLowerCase();
+            const matchesType = !typeVal || 
+              m.type?.toLowerCase() === typeVal.toLowerCase();
+            return matchesGenre && matchesType;
+          });
+          setResults(filtered);
+        }
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Genre filter fetch error, falling back to client-side:", err);
+      if (token === req.current) {
+        const filtered = mangas.filter((m) => {
+          const matchesGenre = !genreSlug || genreSlug === "" || genreSlug === "all" || genreLabel === "Semua" ||
+            m.genre?.toLowerCase() === genreLabel.toLowerCase() || 
+            m.genre?.toLowerCase() === genreSlug.toLowerCase();
+          const matchesType = !typeVal || 
+            m.type?.toLowerCase() === typeVal.toLowerCase();
+          return matchesGenre && matchesType;
+        });
+        setResults(filtered);
+        setLoading(false);
+      }
     }
-  }, []);
+  }, [mangas]);
 
   const list = (active === "Semua" && !activeType) ? mangas : (results ?? []);
 

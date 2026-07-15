@@ -142,13 +142,14 @@ export async function fetchMangaDetail(slug: string): Promise<MangaDetail | null
 
         return {
           title: m.title,
-          coverUrl: m.cover_url ?? undefined,
+          coverUrl: m.coverUrl || m.cover_url || undefined,
           synopsis: m.synopsis ?? "",
           genres: m.genres ?? [],
           status: m.status?.toLowerCase() === "completed" ? "completed" : "ongoing",
           type: (m.type ?? "Manga") as MangaDetail["type"],
           slug,
           chapters,
+          author: m.author ?? undefined,
         };
       }
     } catch (err) {
@@ -185,6 +186,7 @@ export async function fetchMangaDetail(slug: string): Promise<MangaDetail | null
       type: (m.type ?? "Manga") as MangaDetail["type"],
       slug,
       chapters,
+      author: m.author ?? undefined,
     };
   } catch {
     return null;
@@ -254,7 +256,7 @@ export async function fetchGenreManga(slug: string, type?: string): Promise<Mang
           title: m.title,
           chapter: 0,
           badge: null,
-          coverUrl: m.cover_url ?? undefined,
+          coverUrl: m.coverUrl || m.cover_url || undefined,
           genre: m.genres?.[0] || undefined,
           slug: String(m.id),
           author: m.author || undefined,
@@ -278,7 +280,13 @@ export async function fetchGenreManga(slug: string, type?: string): Promise<Mang
     );
     if (!res.ok) return [];
     const json = (await res.json()) as { manga?: LiveTitle[] };
-    return (json.manga ?? []).map((t, i) => toManga(t, i));
+    return (json.manga ?? []).map((t, i) => {
+      const manga = toManga(t, i);
+      if (!manga.genre && slug !== "all") {
+        manga.genre = slug;
+      }
+      return manga;
+    });
   } catch {
     return [];
   }
@@ -297,7 +305,7 @@ export async function fetchSearchResults(q: string): Promise<Manga[]> {
           title: m.title,
           chapter: 0,
           badge: null,
-          coverUrl: m.cover_url ?? undefined,
+          coverUrl: m.coverUrl || m.cover_url || undefined,
           genre: m.genres?.[0] || undefined,
           slug: String(m.id),
           author: m.author || undefined,

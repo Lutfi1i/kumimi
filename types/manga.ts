@@ -39,4 +39,5 @@ export interface MangaDetail {
   type: "Manga" | "Manhwa" | "Manhua";
   slug: string;
   chapters: ChapterInfo[];
+  author?: string;
 }

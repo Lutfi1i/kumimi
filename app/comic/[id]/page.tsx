@@ -3,7 +3,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { getAbstractCover } from "@/components/manga/MangaCard";
 import { fetchMangaDetail } from "@/lib/api";
 import { getMangaById } from "@/lib/mock-data";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen, Zap } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +46,11 @@ export default async function ComicDetailPage({
   const type = detail?.type ?? "Manga";
   const status = detail?.status ?? "ongoing";
   const chapters = detail?.chapters ?? [];
+  const author = detail?.author ?? mock?.author ?? "Tidak diketahui";
+
+  const sortedChapters = [...chapters].sort((a, b) => a.chapterNumber - b.chapterNumber);
+  const firstChapter = sortedChapters[0];
+  const latestChapter = sortedChapters[sortedChapters.length - 1];
 
   return (
     <div className="min-h-screen bg-cream/20 text-ink font-sans">
@@ -76,7 +81,9 @@ export default async function ComicDetailPage({
               {title}
             </h1>
             {/* Author */}
-            <h1 className="font-display text-xl font-bold text-ink mt-4">Eichiro Oda</h1>
+            <p className="text-sm font-medium text-ink-muted mt-2">
+              Karya: <span className="text-ink font-semibold">{author}</span>
+            </p>
             <div className="flex flex-wrap gap-2 mt-3">
               <span className="text-[0.7rem] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-gold/10 text-gold-dark">
                 {type}
@@ -99,6 +106,24 @@ export default async function ComicDetailPage({
                     {g}
                   </span>
                 ))}
+              </div>
+            )}
+
+            {/* Quick Actions */}
+            {chapters.length > 0 && (
+              <div className="flex flex-wrap gap-3 mt-6">
+                <Link
+                  href={`/comic/${id}/${firstChapter.slug}`}
+                  className="px-5 py-2.5 bg-ink text-white hover:bg-ink-muted font-bold text-xs uppercase tracking-wider rounded-xl transition-all duration-150 shadow-sm flex items-center justify-center gap-2"
+                >
+                  Baca Chapter Pertama
+                </Link>
+                <Link
+                  href={`/comic/${id}/${latestChapter.slug}`}
+                  className="px-5 py-2.5 bg-card hover:bg-border text-ink font-bold text-xs uppercase tracking-wider rounded-xl border border-border transition-all duration-150 flex items-center justify-center gap-2"
+                >
+                   Chapter Terbaru{chapters.length > 1 && ` (${chapters.length})`}
+                </Link>
               </div>
             )}
           </div>

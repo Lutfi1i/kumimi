@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { fetchChapterPages } from "@/lib/api";
-import { ArrowLeft } from "lucide-react";
+import { ReaderNavbar } from "@/components/layout/ReaderNavbar";
 
 export const dynamic = "force-dynamic";
 
@@ -15,22 +15,7 @@ export default async function ReaderPage({
   return (
     <div className="min-h-screen bg-ink text-white font-sans">
       {/* Reader header */}
-      <div className="sticky top-0 z-50 bg-cream border-b border-border">
-        <div className="max-w-3xl mx-auto px-3 py-2 flex items-center justify-between">
-          <Link
-            href={`/comic/${id}`}
-            className="inline-flex items-center gap-1 text-xs font-bold text-ink-muted hover:text-gold transition-colors"
-          >
-            <ArrowLeft size={14} /> {chapter}
-          </Link>
-          <Link
-            href="/"
-            className="font-display text-lg font-black text-gold tracking-tight"
-          >
-            Kumimi
-          </Link>
-        </div>
-      </div>
+      <ReaderNavbar id={id} chapter={chapter} />
 
       {/* Panels */}
       <main className="max-w-3xl mx-auto px-3 py-6 space-y-3">
