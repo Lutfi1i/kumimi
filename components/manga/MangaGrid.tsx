@@ -44,7 +44,7 @@ export function MangaGrid({ title, mangas, showGenrePills = false }: MangaGridPr
   const reqRef = useRef(0);
 
   // Pill kategori: "Semua" menampilkan daftar awal, genre lain mengambil
-  // langsung dari backend live (/api/live/genre) yang scrape mangaku.guru.
+  // langsung dari backend live (/api/live/genre) yang scrape komiku.org.
   const handleGenre = useCallback(async (label: string, slug: string) => {
     setActiveGenre(label);
     if (label === "Semua") {

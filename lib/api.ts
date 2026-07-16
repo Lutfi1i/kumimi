@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Manga, RankedManga, RecentManga, MangaDetail, ChapterInfo } from "@/types/manga";
 
 const API_BASE =
@@ -38,11 +39,50 @@ export interface HomeData {
   recent: RecentManga[];
 }
 
-export async function fetchHomeData(): Promise<HomeData | null> {
+/**
+ * Robust fetch helper with timeout that supports older Node.js/browsers
+ * by falling back to AbortController if AbortSignal.timeout is not present.
+ */
+async function fetchWithTimeout(url: string, options: RequestInit & { timeout?: number } = {}) {
+  const { timeout = 8000, ...fetchOptions } = options;
+
+  if (typeof AbortSignal !== "undefined" && "timeout" in AbortSignal) {
+    try {
+      return await fetch(url, {
+        ...fetchOptions,
+        signal: AbortSignal.timeout(timeout),
+      });
+    } catch (err: any) {
+      if (err.name === "TimeoutError" || err.message?.includes("timeout")) {
+        throw new Error(`Fetch timed out after ${timeout}ms`);
+      }
+      throw err;
+    }
+  }
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
   try {
-    const res = await fetch(`${API_BASE}/api/home`, {
+    const res = await fetch(url, {
+      ...fetchOptions,
+      signal: controller.signal,
+    });
+    clearTimeout(id);
+    return res;
+  } catch (err: any) {
+    clearTimeout(id);
+    if (err.name === "AbortError" || err.name === "TimeoutError") {
+      throw new Error(`Fetch timed out after ${timeout}ms`);
+    }
+    throw err;
+  }
+}
+
+export const fetchHomeData = cache(async (): Promise<HomeData | null> => {
+  try {
+    const res = await fetchWithTimeout(`${API_BASE}/api/home`, {
       cache: "no-store",
-      signal: AbortSignal.timeout(8000),
+      timeout: 8000,
     });
 
     if (res.ok) {
@@ -84,9 +124,9 @@ export async function fetchHomeData(): Promise<HomeData | null> {
   try {
     const pages = await Promise.all(
       [1, 2].map((p) =>
-        fetch(`${API_BASE}/api/live/latest?page=${p}`, {
+        fetchWithTimeout(`${API_BASE}/api/live/latest?page=${p}`, {
           cache: "no-store",
-          signal: AbortSignal.timeout(8000),
+          timeout: 8000,
         })
           .then((r) =>
             r.ok ? (r.json() as Promise<{ manga?: LiveTitle[] }>) : null,
@@ -109,21 +149,21 @@ export async function fetchHomeData(): Promise<HomeData | null> {
   } catch {
     return null;
   }
-}
+});
 
-export async function fetchMangaDetail(slug: string): Promise<MangaDetail | null> {
+export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail | null> => {
   if (/^\d+$/.test(slug)) {
     try {
-      const mangaRes = await fetch(`${API_BASE}/api/manga/${slug}`, {
+      const mangaRes = await fetchWithTimeout(`${API_BASE}/api/manga/${slug}`, {
         cache: "no-store",
-        signal: AbortSignal.timeout(8000),
+        timeout: 8000,
       });
       if (mangaRes.ok) {
         const m = await mangaRes.json();
         
-        const chaptersRes = await fetch(`${API_BASE}/api/manga/${slug}/chapters?order=desc`, {
+        const chaptersRes = await fetchWithTimeout(`${API_BASE}/api/manga/${slug}/chapters?order=desc`, {
           cache: "no-store",
-          signal: AbortSignal.timeout(8000),
+          timeout: 8000,
         });
         
         let chapters: ChapterInfo[] = [];
@@ -138,7 +178,7 @@ export async function fetchMangaDetail(slug: string): Promise<MangaDetail | null
         }
 
         // Record a page view in a non-blocking way
-        fetch(`${API_BASE}/api/manga/${slug}/view`, { method: "POST" }).catch(() => {});
+        fetchWithTimeout(`${API_BASE}/api/manga/${slug}/view`, { method: "POST" }).catch(() => {});
 
         return {
           title: m.title,
@@ -158,9 +198,9 @@ export async function fetchMangaDetail(slug: string): Promise<MangaDetail | null
   }
 
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       `${API_BASE}/api/live/detail?slug=${encodeURIComponent(slug)}`,
-      { cache: "no-store", signal: AbortSignal.timeout(10000) },
+      { cache: "no-store", timeout: 10000 },
     );
     if (!res.ok) return null;
     const json = (await res.json()) as { status: boolean; manga?: any };
@@ -191,20 +231,20 @@ export async function fetchMangaDetail(slug: string): Promise<MangaDetail | null
   } catch {
     return null;
   }
-}
+});
 
-export async function fetchChapterPages(
+export const fetchChapterPages = cache(async (
   mangaSlug: string,
   chapterSlug: string,
-): Promise<string[] | null> {
+): Promise<string[] | null> => {
   if (/^\d+$/.test(mangaSlug)) {
     try {
       const match = chapterSlug.match(/chapter-([\d.]+)/) || chapterSlug.match(/^([\d.]+)$/);
       const chapterNumber = match ? match[1] : chapterSlug;
       
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `${API_BASE}/api/manga/${mangaSlug}/chapters/${chapterNumber}`,
-        { cache: "no-store", signal: AbortSignal.timeout(10000) },
+        { cache: "no-store", timeout: 10000 },
       );
       if (res.ok) {
         const json = await res.json();
@@ -221,9 +261,9 @@ export async function fetchChapterPages(
   }
 
   try {
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       `${API_BASE}/api/live/read?slug=${encodeURIComponent(chapterSlug)}&manga=${encodeURIComponent(mangaSlug)}`,
-      { cache: "no-store", signal: AbortSignal.timeout(10000) },
+      { cache: "no-store", timeout: 10000 },
     );
     if (!res.ok) return null;
     const json = (await res.json()) as { status: boolean; pages?: string[] };
@@ -231,9 +271,9 @@ export async function fetchChapterPages(
   } catch {
     return null;
   }
-}
+});
 
-export async function fetchGenreManga(slug: string, type?: string): Promise<Manga[]> {
+export const fetchGenreManga = cache(async (slug: string, type?: string): Promise<Manga[]> => {
   try {
     const params = new URLSearchParams();
     if (slug && slug !== "all") {
@@ -243,9 +283,9 @@ export async function fetchGenreManga(slug: string, type?: string): Promise<Mang
       params.append("type", type);
     }
 
-    const res = await fetch(`${API_BASE}/api/manga?${params.toString()}`, {
+    const res = await fetchWithTimeout(`${API_BASE}/api/manga?${params.toString()}`, {
       cache: "no-store",
-      signal: AbortSignal.timeout(8000),
+      timeout: 8000,
     });
     if (res.ok) {
       const json = await res.json();
@@ -274,9 +314,9 @@ export async function fetchGenreManga(slug: string, type?: string): Promise<Mang
     if (slug) params.append("slug", slug);
     if (type) params.append("type", type);
 
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       `${API_BASE}/api/live/genre?${params.toString()}`,
-      { cache: "no-store", signal: AbortSignal.timeout(8000) },
+      { cache: "no-store", timeout: 8000 },
     );
     if (!res.ok) return [];
     const json = (await res.json()) as { manga?: LiveTitle[] };
@@ -290,12 +330,12 @@ export async function fetchGenreManga(slug: string, type?: string): Promise<Mang
   } catch {
     return [];
   }
-}
+});
 
-export async function fetchSearchResults(q: string): Promise<Manga[]> {
-  const dbPromise = fetch(`${API_BASE}/api/manga?search=${encodeURIComponent(q)}`, {
+export const fetchSearchResults = cache(async (q: string): Promise<Manga[]> => {
+  const dbPromise = fetchWithTimeout(`${API_BASE}/api/manga?search=${encodeURIComponent(q)}`, {
     cache: "no-store",
-    signal: AbortSignal.timeout(8000),
+    timeout: 8000,
   })
     .then(async (res) => {
       if (res.ok) {
@@ -322,9 +362,9 @@ export async function fetchSearchResults(q: string): Promise<Manga[]> {
       return [];
     });
 
-  const livePromise = fetch(
+  const livePromise = fetchWithTimeout(
     `${API_BASE}/api/live/search?q=${encodeURIComponent(q)}`,
-    { cache: "no-store", signal: AbortSignal.timeout(8000) }
+    { cache: "no-store", timeout: 8000 }
   )
     .then(async (res) => {
       if (res.ok) {
@@ -367,4 +407,4 @@ export async function fetchSearchResults(q: string): Promise<Manga[]> {
     console.error("fetchSearchResults merge error:", err);
     return [];
   }
-}
+});

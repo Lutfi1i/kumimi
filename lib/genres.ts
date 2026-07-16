@@ -3,7 +3,7 @@ export interface GenreItem {
   slug: string;
 }
 
-// Kategori genre Kumimi. `slug` mengikuti struktur URL mangaku.guru (/genre/<slug>/)
+// Kategori genre Kumimi. `slug` mengikuti struktur URL komiku.org (/genre/<slug>/)
 // sehingga bisa langsung dipakai oleh endpoint backend /api/live/genre?slug=<slug>.
 export const GENRES: GenreItem[] = [
   { label: "Semua", slug: "" },
