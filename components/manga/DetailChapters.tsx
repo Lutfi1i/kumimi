@@ -69,9 +69,9 @@ export function DetailChapters({ chapters, comicId }: DetailChaptersProps) {
 
       {/* Chapters Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-        {sortedChapters.map((ch) => (
+        {sortedChapters.map((ch, idx) => (
           <Link
-            key={ch.slug}
+            key={`${ch.slug}-${idx}`}
             href={`/comic/${comicId}/${ch.slug}`}
             className="group flex flex-col p-3 bg-white dark:bg-[#1a1b1d] border border-neutral-200 dark:border-[#2a2b2d] hover:border-[#ff6740] dark:hover:border-[#ff6740] rounded-xl transition-all duration-200 hover:scale-[1.01] hover:shadow-md text-left"
           >
