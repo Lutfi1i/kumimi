@@ -64,10 +64,15 @@ export default async function ComicDetailPage({
           className="absolute inset-0 bg-cover bg-center scale-105 blur-3xl opacity-35 dark:opacity-45 pointer-events-none"
           style={{ backgroundImage: coverUrl ? `url("${coverUrl}")` : 'none' }}
         />
+        <Link
+            href="/"
+            className="inline-flex items-center lg:pl-36 mb-5 gap-2 text-xs font-bold text-[#ff6740] hover:underline"
+          >
+            <ArrowLeft size={14} /> Kembali ke Beranda
+          </Link>
         
         {/* Dark/Light overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-50/70 to-neutral-50 dark:from-transparent dark:via-[#0f0f10]/80 dark:to-[#0f0f10]" />
-
         <div className="relative max-w-7xl mx-auto px-5 md:px-8 z-10 flex flex-col md:flex-row gap-8 items-start md:items-end">
           {/* Cover image card */}
           <div className="relative w-44 md:w-56 shrink-0 aspect-[3/4] overflow-hidden shadow-2xl bg-neutral-200 dark:bg-neutral-800 self-center md:self-auto">
