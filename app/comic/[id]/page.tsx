@@ -24,7 +24,7 @@ export default async function ComicDetailPage({
         <div className="max-w-md mx-auto py-24 text-center space-y-4">
           <h2 className="text-2xl font-black">Komik Tidak Ditemukan</h2>
           <p className="text-sm text-neutral-500 dark:text-neutral-450">
-            Maaf, komik dengan slug atau ID "{id}" tidak ditemukan di database kami.
+            Maaf, komik dengan slug atau ID `&quot;`{id}`&quot;` tidak ditemukan di database kami.
           </p>
           <Link
             href="/"

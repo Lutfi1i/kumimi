@@ -18,7 +18,7 @@ export default async function ReaderPage({
       <ReaderNavbar id={id} chapter={chapter} />
 
       {/* Panels */}
-      <main className="max-w-3xl mx-auto px-3 py-6 space-y-3">
+      <main className="max-w-3xl mx-auto w-full flex flex-col items-center">
         {pages ? (
           pages.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
@@ -26,7 +26,7 @@ export default async function ReaderPage({
               key={i}
               src={src}
               alt={`Page ${i + 1}`}
-              className="w-full rounded-md bg-neutral-900"
+              className="w-full rounded-none block bg-neutral-950 reader-page-img"
             />
           ))
         ) : (
