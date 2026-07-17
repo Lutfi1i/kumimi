@@ -17,6 +17,16 @@ function slugFromUrl(url?: string): string | undefined {
   return m ? m[1] : undefined;
 }
 
+function getSlug(m: any): string {
+  if (!m.title) return String(m.id);
+  return m.title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
 function toManga(t: LiveTitle, i: number): Manga {
   return {
     id: i + 1,
@@ -95,7 +105,7 @@ export const fetchHomeData = cache(async (): Promise<HomeData | null> => {
         badge: m.updatedWithin24h ? "update" : null,
         coverUrl: m.coverUrl || m.cover_url || undefined,
         genre: m.genres?.[0] || undefined,
-        slug: String(m.id),
+        slug: getSlug(m),
         author: m.author || undefined,
         views: m.views ? String(m.views) : undefined,
         type: m.type || undefined,
@@ -208,12 +218,17 @@ export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail 
     if (!m) return null;
 
     const chapters: ChapterInfo[] = (m.chapters ?? []).map((c: any) => {
-      const cm = c.chapterUrl?.match(/\/(chapter-[^/]+)/);
+      let slug = `chapter-${c.chapterNumber}`;
+      if (c.chapterUrl) {
+        const cleaned = c.chapterUrl.replace(/\/$/, "");
+        const parts = cleaned.split("/");
+        slug = parts[parts.length - 1] || slug;
+      }
       return {
         chapterNumber: c.chapterNumber,
         chapterUrl: c.chapterUrl,
         title: c.title,
-        slug: cm ? cm[1] : `chapter-${c.chapterNumber}`,
+        slug,
       };
     });
 
@@ -298,7 +313,7 @@ export const fetchGenreManga = cache(async (slug: string, type?: string): Promis
           badge: null,
           coverUrl: m.coverUrl || m.cover_url || undefined,
           genre: m.genres?.[0] || undefined,
-          slug: String(m.id),
+          slug: getSlug(m),
           author: m.author || undefined,
           views: m.views ? String(m.views) : undefined,
           type: m.type || undefined,
@@ -347,7 +362,7 @@ export const fetchSearchResults = cache(async (q: string): Promise<Manga[]> => {
           badge: null,
           coverUrl: m.coverUrl || m.cover_url || undefined,
           genre: m.genres?.[0] || undefined,
-          slug: String(m.id),
+          slug: getSlug(m),
           author: m.author || undefined,
           views: m.views ? String(m.views) : undefined,
           type: m.type || undefined,
