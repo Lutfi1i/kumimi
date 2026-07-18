@@ -54,9 +54,9 @@ export default function HistoryPage() {
     <>
       <Navbar />
 
-      <div className="w-full bg-[#f8f9fa] min-h-screen pb-16">
+      <div className="w-full bg-[#f8f9fa] dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 min-h-screen pb-16 transition-colors duration-200">
         {/* Banner Section */}
-        <div className="w-full bg-[#191a1c] border-b border-gray-200/50 py-12 text-white shadow-xs">
+        <div className="w-full bg-[#191a1c] dark:bg-[#151618] border-b border-gray-200/50 dark:border-neutral-800/50 py-12 text-white shadow-xs">
           <div className="max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 lg:px-[120px] flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider bg-white/10 text-white/95 px-3 py-1 rounded-full backdrop-blur-xs select-none">
@@ -84,12 +84,12 @@ export default function HistoryPage() {
           {/* Controls */}
           {history.length > 0 && (
             <div className="flex items-center justify-between mb-6">
-              <p className="text-sm text-gray-500 font-medium">
+              <p className="text-sm text-gray-500 dark:text-neutral-400 font-medium">
                 Riwayat disimpan lokal di browser ini saja.
               </p>
               <button
                 onClick={handleClearAll}
-                className="flex items-center gap-1.5 text-xs font-bold text-[#ff6740] hover:text-[#e05330] hover:underline transition-all"
+                className="flex items-center gap-1.5 text-xs font-bold text-[#ff6740] hover:text-[#e05330] hover:underline transition-all cursor-pointer"
               >
                 <Trash2 size={13} />
                 Hapus Semua
@@ -100,11 +100,11 @@ export default function HistoryPage() {
           {!loaded ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="aspect-3/4 rounded-lg bg-gray-200 animate-pulse" />
+                <div key={i} className="aspect-3/4 rounded-lg bg-gray-200 dark:bg-neutral-800 animate-pulse" />
               ))}
             </div>
           ) : history.length === 0 ? (
-            <div className="py-16 bg-white rounded-2xl border border-gray-200 shadow-xs">
+            <div className="py-16 bg-white dark:bg-[#151618] rounded-2xl border border-gray-200 dark:border-neutral-800 shadow-xs">
               <EmptyState
                 title="Belum Ada Riwayat"
                 description="Komik yang kamu baca akan muncul di sini biar gampang dilanjutin lagi."
@@ -145,7 +145,7 @@ function HistoryCard({
           e.preventDefault();
           onRemove(entry.comicId);
         }}
-        className="absolute top-2 right-2 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 hover:bg-black/80 transition-all"
+        className="absolute top-2 right-2 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 hover:bg-black/80 transition-all cursor-pointer"
         aria-label="Hapus dari riwayat"
       >
         <X size={13} />
@@ -155,7 +155,7 @@ function HistoryCard({
         href={`/comic/${entry.slug}/${entry.lastChapterSlug}`}
         className="flex flex-col gap-2"
       >
-        <div className="relative w-full aspect-3/4 rounded-lg overflow-hidden border border-gray-200 transition-all duration-300 group-hover:-translate-y-1.5 group-hover:scale-[1.02]">
+        <div className="relative w-full aspect-3/4 rounded-lg overflow-hidden border border-gray-200 dark:border-neutral-800 transition-all duration-300 group-hover:-translate-y-1.5 group-hover:scale-[1.02]">
           {entry.coverUrl ? (
             <img src={entry.coverUrl} alt={entry.title} className="w-full h-full object-cover" />
             ) : (
@@ -176,10 +176,10 @@ function HistoryCard({
         </div>
 
         <div>
-          <p className="text-[0.8rem] font-semibold text-black leading-tight truncate">
+          <p className="text-[0.8rem] font-semibold text-neutral-900 dark:text-white leading-tight truncate">
             {entry.title}
           </p>
-          <div className="flex items-center gap-1.5 mt-0.5 text-[0.7rem] text-gray-500">
+          <div className="flex items-center gap-1.5 mt-0.5 text-[0.7rem] text-gray-500 dark:text-neutral-400">
             {entry.type && (
               <span className="text-[9px] font-bold bg-[#ff6740]/10 text-[#ff6740] px-1.5 py-0.2 rounded-sm font-mono">
                 {entry.type.toUpperCase()}

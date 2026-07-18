@@ -4,7 +4,7 @@ export function NowOnWebtoon() {
   return (
     <section className="mb-8">
       <div className="mb-4">
-        <h2 className="font-bold text-[26px] text-black">Now on WEBTOON</h2>
+        <h2 className="font-bold text-[26px] text-neutral-900 dark:text-white">Now on WEBTOON</h2>
       </div>
 
       <Link

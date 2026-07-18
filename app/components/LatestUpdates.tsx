@@ -9,50 +9,7 @@ interface UpdateItem {
 }
 
 export default function LatestUpdates() {
-  const updates: UpdateItem[] = [
-    { 
-      id: 1, 
-      title: "Pedang Terakhir", 
-      chapter: "Chapter 142", 
-      timeAgo: "10 mnt lalu",
-      image: "/poster-manhwa-TWATF.jpeg"
-    },
-    { 
-      id: 2, 
-      title: "The Heavenly Demon", 
-      chapter: "Chapter 88", 
-      timeAgo: "42 mnt lalu",
-      image: "/poster-manhwa-TWATF.jpeg"
-    },
-    { 
-      id: 3, 
-      title: "Top Corner", 
-      chapter: "Chapter 110", 
-      timeAgo: "2 jam lalu",
-      image: "/poster-manhwa-TWATF.jpeg"
-    },
-    { 
-      id: 4, 
-      title: "Eleceed Modern", 
-      chapter: "Chapter 294", 
-      timeAgo: "5 jam lalu",
-      image: "/poster-manhwa-TWATF.jpeg"
-    },
-    { 
-      id: 5, 
-      title: "Mercenary Enrollment", 
-      chapter: "Chapter 185", 
-      timeAgo: "Kemarin",
-      image: "/poster-manhwa-TWATF.jpeg"
-    },
-    { 
-      id: 6, 
-      title: "Wind Breaker", 
-      chapter: "Chapter 490", 
-      timeAgo: "Kemarin",
-      image: "/poster-manhwa-TWATF.jpeg"
-    },
-  ];
+  const updates: UpdateItem[] = [];
 
   return (
     <section className="py-8 px-4 max-w-7xl mx-auto bg-white">

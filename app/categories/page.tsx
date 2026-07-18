@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { GENRES } from "@/lib/genres";
 import { fetchGenreMangaPaged } from "@/lib/api";
 import { getMockMangas } from "@/lib/mock-data";
+
 import type { Manga } from "@/types/manga";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Filter, BookOpen } from "lucide-react";
@@ -121,9 +122,9 @@ export default function CategoriesPage() {
     <>
       <Navbar />
 
-      <div className="w-full bg-[#f8f9fa] min-h-screen pb-16">
+      <div className="w-full bg-[#f8f9fa] dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 min-h-screen pb-16 transition-colors duration-200">
         {/* Banner Section */}
-        <div className="w-full bg-[#191a1c] border-b border-gray-200/50 py-12 text-white shadow-xs">
+        <div className="w-full bg-[#191a1c] dark:bg-[#151618] border-b border-gray-200/50 dark:border-neutral-800/50 py-12 text-white shadow-xs">
           <div className="max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 lg:px-[120px] flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider bg-white/10 text-white/95 px-3 py-1 rounded-full backdrop-blur-xs select-none">
@@ -150,13 +151,13 @@ export default function CategoriesPage() {
         <div className="max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 lg:px-[120px] py-8">
           
           {/* Filtering Control Bar */}
-          <div className="bg-white rounded-2xl border border-gray-200/80 p-5 md:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] mb-8 space-y-6">
+          <div className="bg-white dark:bg-[#151618] rounded-2xl border border-gray-200/80 dark:border-neutral-800 p-5 md:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.4)] mb-8 space-y-6">
             
             {/* Filter Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-neutral-850">
               <div className="flex items-center gap-2">
                 <Filter className="w-5 h-5 text-[#ff6740]" />
-                <h3 className="font-bold text-gray-800 text-lg">Filter Komik</h3>
+                <h3 className="font-bold text-gray-800 dark:text-white text-lg">Filter Komik</h3>
               </div>
               <button 
                 onClick={() => {
@@ -165,7 +166,7 @@ export default function CategoriesPage() {
                   setSelectedType("");
                   setCurrentPage(1);
                 }}
-                className="text-xs font-bold text-[#ff6740] hover:text-[#e05330] hover:underline transition-all"
+                className="text-xs font-bold text-[#ff6740] hover:text-[#e05330] hover:underline transition-all cursor-pointer"
               >
                 Reset Filter
               </button>
@@ -173,7 +174,7 @@ export default function CategoriesPage() {
 
             {/* Genre Filter Pills */}
             <div>
-              <p className="text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-3">Genre / Kategori</p>
+              <p className="text-xs font-extrabold text-gray-500 dark:text-neutral-450 uppercase tracking-wider mb-3">Genre / Kategori</p>
               <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
                 {GENRES.map((g) => {
                   const isSelected = selectedGenre === g.slug || (g.slug === "" && selectedGenre === "");
@@ -184,8 +185,8 @@ export default function CategoriesPage() {
                       className={cn(
                         "shrink-0 text-xs font-bold px-4 py-2.5 rounded-full border transition-all duration-200 cursor-pointer shadow-xs",
                         isSelected
-                          ? "bg-black border-black text-white hover:scale-[1.02]"
-                          : "bg-gray-50 border-gray-200 text-gray-700 hover:border-black hover:text-black hover:bg-white"
+                          ? "bg-black dark:bg-white border-black dark:border-white text-white dark:text-black hover:scale-[1.02]"
+                          : "bg-gray-50 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-neutral-300 hover:border-black dark:hover:border-white hover:bg-white dark:hover:bg-neutral-850"
                       )}
                     >
                       {g.label}
@@ -197,7 +198,7 @@ export default function CategoriesPage() {
 
             {/* Type Filter Pills */}
             <div>
-              <p className="text-xs font-extrabold text-gray-500 uppercase tracking-wider mb-3">Tipe Komik</p>
+              <p className="text-xs font-extrabold text-gray-500 dark:text-neutral-450 uppercase tracking-wider mb-3">Tipe Komik</p>
               <div className="flex flex-wrap gap-2">
                 {TYPES.map((t) => {
                   const isSelected = selectedType === t.value;
@@ -209,7 +210,7 @@ export default function CategoriesPage() {
                         "text-xs font-bold px-4.5 py-2.5 rounded-full border transition-all duration-200 cursor-pointer shadow-xs",
                         isSelected
                           ? "bg-[#ff6740] border-[#ff6740] text-white hover:scale-[1.02]"
-                          : "bg-gray-50 border-gray-200 text-gray-700 hover:border-black hover:text-black hover:bg-white"
+                          : "bg-gray-50 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-neutral-300 hover:border-black dark:hover:border-white hover:bg-white dark:hover:bg-neutral-850"
                       )}
                     >
                       {t.label}
@@ -228,7 +229,7 @@ export default function CategoriesPage() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
                 {Array.from({ length: itemsPerPage }).map((_, i) => (
                   <div key={i} className="flex flex-col gap-2">
-                    <div className="relative w-full aspect-3/4 rounded-lg overflow-hidden border border-gray-200">
+                    <div className="relative w-full aspect-3/4 rounded-lg overflow-hidden border border-gray-200 dark:border-neutral-800">
                       <ShimmerBox />
                     </div>
                     <div className="w-full h-4 mb-1.5 rounded-sm overflow-hidden">
@@ -241,7 +242,7 @@ export default function CategoriesPage() {
                 ))}
               </div>
             ) : currentMangas.length === 0 ? (
-              <div className="py-16 bg-white rounded-2xl border border-gray-200 shadow-xs">
+              <div className="py-16 bg-white dark:bg-[#151618] rounded-2xl border border-gray-200 dark:border-neutral-800 shadow-xs">
                 <EmptyState 
                   title="Komik Tidak Ditemukan" 
                   description={`Maaf, tidak ada komik yang sesuai dengan kategori "${selectedGenreLabel}" dan tipe "${selectedType || "Semua"}".`} 
@@ -265,10 +266,10 @@ export default function CategoriesPage() {
 
                 {/* Pagination Controls */}
                 {totalPages > 1 && (
-                  <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-gray-200/60 gap-4">
+                  <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-gray-200/60 dark:border-neutral-800/60 gap-4">
                     {/* Showing information */}
-                    <p className="text-xs text-gray-500 font-medium">
-                      Menampilkan <span className="font-bold text-gray-800">{startIndex + 1}</span> - <span className="font-bold text-gray-800">{endIndex}</span> dari <span className="font-bold text-gray-800">{totalItems}</span> komik
+                    <p className="text-xs text-gray-500 dark:text-neutral-400 font-medium">
+                      Menampilkan <span className="font-bold text-gray-800 dark:text-white">{startIndex + 1}</span> - <span className="font-bold text-gray-800 dark:text-white">{endIndex}</span> dari <span className="font-bold text-gray-800 dark:text-white">{totalItems}</span> komik
                     </p>
 
                     {/* Pagination Numbers Navigation */}
@@ -278,7 +279,7 @@ export default function CategoriesPage() {
                         onClick={() => handlePageChange(1)}
                         disabled={currentPage === 1 || isPending}
                         className={cn(
-                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 bg-white hover:border-black hover:text-black transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-350 bg-white dark:bg-neutral-900 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
                         )}
                         title="Halaman Pertama"
                       >
@@ -290,7 +291,7 @@ export default function CategoriesPage() {
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1 || isPending}
                         className={cn(
-                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 bg-white hover:border-black hover:text-black transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-350 bg-white dark:bg-neutral-900 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
                         )}
                         title="Halaman Sebelumnya"
                       >
@@ -301,7 +302,7 @@ export default function CategoriesPage() {
                       {getPageNumbers().map((p, idx) => {
                         if (p === "...") {
                           return (
-                            <span key={`dots-${idx}`} className="w-9 h-9 flex items-center justify-center text-sm font-semibold text-gray-400 select-none">
+                            <span key={`dots-${idx}`} className="w-9 h-9 flex items-center justify-center text-sm font-semibold text-gray-400 dark:text-neutral-500 select-none">
                               ...
                             </span>
                           );
@@ -318,8 +319,8 @@ export default function CategoriesPage() {
                             className={cn(
                               "w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold border transition-all cursor-pointer",
                               isCurrent
-                                ? "bg-black border-black text-white hover:scale-105"
-                                : "bg-white border-gray-200 text-gray-700 hover:border-black hover:text-black"
+                                ? "bg-black dark:bg-white border-black dark:border-white text-white dark:text-black hover:scale-105"
+                                : "bg-white dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-neutral-305 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white"
                             )}
                           >
                             {pageNum}
@@ -332,7 +333,7 @@ export default function CategoriesPage() {
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages || isPending}
                         className={cn(
-                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 bg-white hover:border-black hover:text-black transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-350 bg-white dark:bg-neutral-900 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
                         )}
                         title="Halaman Selanjutnya"
                       >
@@ -344,7 +345,7 @@ export default function CategoriesPage() {
                         onClick={() => handlePageChange(totalPages)}
                         disabled={currentPage === totalPages || isPending}
                         className={cn(
-                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 bg-white hover:border-black hover:text-black transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                          "w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-neutral-350 bg-white dark:bg-neutral-900 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
                         )}
                         title="Halaman Terakhir"
                       >

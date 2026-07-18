@@ -17,9 +17,12 @@ const NAV_LINKS = [
 
 function MascotLogo() {
   return (
-    <svg className="w-7 h-7 text-[#ff6740] fill-current drop-shadow-[0_0_4px_rgba(255,103,64,0.3)] group-hover:drop-shadow-[0_0_8px_rgba(255,103,64,0.75)] transition-all duration-300" viewBox="0 0 24 24">
-      <path d="M12 3c-1.2 0-2.4.3-3.5.9L5.2 2.1C4.8 1.8 4.2 2 4 2.5c-.2.5 0 1.1.5 1.3l2.5 1.5C5.2 6.7 4 8.7 4 11c0 4.4 3.6 8 8 8s8-3.6 8-8c0-2.3-1.2-4.3-3-5.7l2.5-1.5c.5-.2.7-.8.5-1.3-.2-.5-.8-.7-1.2-.4l-3.3 1.9C14.4 3.3 13.2 3 12 3zm-3.5 9c-.8 0-1.5-.7-1.5-1.5S7.7 9 8.5 9s1.5.7 1.5 1.5-.7 1.5-1.5 1.5zm7 0c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img 
+      src="/kumimi-logo.svg" 
+      alt="Logo" 
+      className="w-7 h-7 object-contain transition-all duration-300 group-hover:scale-105" 
+    />
   );
 }
 
@@ -136,14 +139,14 @@ export function Navbar() {
       "sticky top-0 z-50 transition-all duration-300 ease-in-out",
       isScrolled
         ? "bg-white/80 dark:bg-[#191a1c]/80 border-b border-gray-200/50 dark:border-neutral-800/50 backdrop-blur-lg shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_15px_-3px_rgba(0,0,0,0.3)] text-black dark:text-white"
-        : "bg-white dark:bg-white border-b border-transparent text-black dark:text-black"
+        : "bg-white dark:bg-[#191a1c] border-b border-transparent text-black dark:text-white"
     )}>
       <div className="max-w-[1400px] mx-auto px-5 h-[76px] flex items-center justify-between gap-4">
         {/* Left Logo & Links */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 select-none group">
             <MascotLogo />
-            <span className="text-[20px] font-black tracking-tight leading-none group-hover:text-[#ff6740] transition-colors">
+            <span className="text-[24px] font-bold tracking-tight leading-none group-hover:text-[#ff6740] transition-colors" style={{ fontFamily: "cursive" }}>
               Kumimi
             </span>
           </Link>
@@ -156,7 +159,7 @@ export function Navbar() {
                   href={link.href}
                   className={cn(
                     "relative group font-bold text-[14px] whitespace-nowrap hover:text-[#ff6740] dark:hover:text-[#ff6740] transition-colors duration-150 py-2",
-                    isScrolled ? "text-gray-700 dark:text-[#e1e2e4]" : "text-gray-700 dark:text-gray-700"
+                    "text-gray-700 dark:text-[#e1e2e4]"
                   )}
                 >
                   {link.label}
@@ -319,8 +322,7 @@ export function Navbar() {
           {/* Mobile menu icon */}
           <button
             className={cn(
-              "xl:hidden p-1.5 hover:text-[#ff6740] transition-colors",
-              isScrolled ? "text-gray-700 dark:text-white" : "text-gray-700 dark:text-gray-700"
+              "xl:hidden p-1.5 hover:text-[#ff6740] transition-colors text-gray-700 dark:text-white"
             )}
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"

@@ -12,18 +12,7 @@ type Comic = {
     rating: number;
 };
 
-const trending: Comic[] = [
-    { rank: 1, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.9, hue: ["#10b981", "#022c22"] },
-    { rank: 2, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.8, hue: ["#10b981", "#022c22"] },
-    { rank: 3, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.7, hue: ["#10b981", "#022c22"] },
-    { rank: 4, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.6, hue: ["#10b981", "#022c22"] },
-    { rank: 5, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.5, hue: ["#10b981", "#022c22"] },
-    { rank: 6, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.4, hue: ["#10b981", "#022c22"] },
-    { rank: 7, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.3, hue: ["#10b981", "#022c22"] },
-    { rank: 8, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.2, hue: ["#10b981", "#022c22"] },
-    { rank: 9, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.1, hue: ["#10b981", "#022c22"] },
-    { rank: 10, image: "/poster-manhwa-TWATF.jpeg", title: "The World After the Fall", genre: "Aksi", chapter: "Ch. 142", type: "Manhwa", rating: 4.0, hue: ["#10b981", "#022c22"] },
-];
+const trending: Comic[] = [];
 
 export default function GenreList() {
     const genres: string[] = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu", "Selesai"];

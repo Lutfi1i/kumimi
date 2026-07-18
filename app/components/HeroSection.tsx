@@ -8,35 +8,22 @@ type Hero = {
     desc: string;
 };
 
-const heroes: Hero[] = [
-    {
-        title: "The World After the Fall",
-        image: "/hero-TWATF.jpeg",
-        desc: "Kisah pendekar terakhir dalam dunia penuh konflik...",
-    },
-    {
-        title: "The Beginning After the End",
-        image: "/hero-TBATE.jpeg",
-        desc: "Bangkit dari kelemahan menjadi raja bayangan...",
-    },
-    {
-        title: "Revenge Of The Iron-Blooded Sword Hound",
-        image: "/hero-ROTIBSH.jpeg",
-        desc: "Perjalanan membasmi iblis demi keluarganya...",
-    },
-];
+const heroes: Hero[] = [];
 
 export default function HeroCarousel() {
     const [index, setIndex] = useState(0);
 
     // AUTO SLIDE
     useEffect(() => {
+        if (heroes.length === 0) return;
         const interval = setInterval(() => {
             setIndex((prev) => (prev + 1) % heroes.length);
         }, 5000);
 
         return () => clearInterval(interval);
     }, []);
+
+    if (heroes.length === 0) return null;
 
     return (
         <section className="relative overflow-hidden rounded-xl border border-white/10">

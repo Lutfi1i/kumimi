@@ -18,12 +18,12 @@ interface SectionHeaderProps {
 export function SectionHeader({ title, href = "#" }: SectionHeaderProps) {
   return (
     <div className="flex items-baseline justify-between mb-4">
-      <h2 className="text-[26px] font-bold text-black">
+      <h2 className="text-[26px] font-bold text-neutral-900 dark:text-white">
         {title}
       </h2>
       <Link
         href={href}
-        className="text-[13px] text-black font-bold hover:underline underline-offset-2"
+        className="text-[13px] text-neutral-800 dark:text-[#ff6740] font-bold hover:underline underline-offset-2"
       >
         Lihat Semua →
       </Link>
@@ -72,11 +72,11 @@ export function MangaGrid({ title, mangas, showGenrePills = false }: MangaGridPr
               key={g.label}
               onClick={() => handleGenre(g.label, g.slug)}
               className={cn(
-                "text-[0.85rem] font-medium px-4 py-2 rounded-full",
-                "border transition-all duration-150",
+                "text-[0.85rem] font-bold px-4 py-2 rounded-full",
+                "border transition-all duration-150 cursor-pointer",
                 activeGenre === g.label
-                  ? "bg-black border-black text-white"
-                  : "bg-[#f3f3f3] border-[#e0e0e0] text-black hover:border-black hover:text-black"
+                  ? "bg-black dark:bg-white border-black dark:border-white text-white dark:text-black"
+                  : "bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-300 hover:border-black dark:hover:border-white"
               )}
             >
               {g.label}
@@ -126,24 +126,23 @@ export function MangaGrid({ title, mangas, showGenrePills = false }: MangaGridPr
 /* ── Featured Banner ── */
 export function FeaturedBanner() {
   return (
-    <div className="relative w-full rounded-lg overflow-hidden mb-8 border border-[#e0e0e0] bg-white p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-left">
+    <div className="relative w-full rounded-2xl overflow-hidden mb-8 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#151618] p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-left shadow-xs">
       <div className="max-w-md">
-        <span className="inline-flex items-center gap-1 text-[11px] font-extrabold tracking-widest text-black uppercase mb-2">
-          ✦ PROMOSI EKSKLUSIF
+        <span className="inline-flex items-center gap-1 text-[11px] font-extrabold tracking-widest text-[#ff6740] uppercase mb-2">
+          ✦ BANNER NANTINYA
         </span>
-        <h3 className="text-[22px] font-bold text-black leading-snug">
-          Baca Chapter Baru Eksklusif Setiap Hari Jumat!
+        <h3 className="text-[22px] font-bold text-neutral-900 dark:text-white leading-snug">
+          Notifikasi/Banner Pembaruan dari Sistem tapi nanti, adalah pokoknya!
         </h3>
-        <p className="text-[14px] text-[#666] mt-2 leading-relaxed">
+        <p className="text-[14px] text-neutral-600 dark:text-neutral-400 mt-2 leading-relaxed">
           Nikmati akses perdana 24 jam lebih awal untuk komik berlabel{" "}
-          <span className="text-black font-bold">KUMIMI SELECT</span> sebelum dirilis ke publik.
         </p>
       </div>
       <Link
-        href="/client/register"
-        className="inline-flex items-center justify-center bg-black hover:bg-[#1a1a1a] text-white text-[14px] font-bold h-10 px-6 rounded-full shrink-0 cursor-pointer transition-all duration-150"
+        href="#"
+        className="inline-flex items-center justify-center bg-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-black text-[14px] font-bold h-10 px-6 rounded-full shrink-0 cursor-pointer transition-all duration-150 shadow-xs"
       >
-        Daftar Akun Premium
+        Coming very soon
       </Link>
     </div>
   );

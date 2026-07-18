@@ -14,12 +14,12 @@ export function UpdateRow({ title = "Pembaruan Terbaru", mangas, href = "#" }: U
   return (
     <div className="mb-8">
       <div className="flex items-baseline justify-between mb-4">
-        <h2 className="text-[26px] font-bold text-black">
+        <h2 className="text-[26px] font-bold text-neutral-900 dark:text-white">
           {title}
         </h2>
         <Link
           href={href}
-          className="text-[13px] text-black font-bold hover:underline underline-offset-2"
+          className="text-[13px] text-neutral-800 dark:text-[#ff6740] font-bold hover:underline underline-offset-2"
         >
           Lihat Semua →
         </Link>

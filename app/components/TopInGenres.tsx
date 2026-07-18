@@ -15,18 +15,7 @@ interface MangaCard {
 const genreSelector: string[] = ["Action", "Romance", "Fantasy", "Isekai", "Horror", "Slice of Life", "Sci-Fi"];
 
 
-const popularData: MangaCard[] = [
-    { id: 1, image: "/poster-manhwa-TWATF.jpeg", title: "Pedang Terakhir", chapter: "Ch. 142", rating: "4.9", genre: "Action", type: "Manhwa" },
-    { id: 2, image: "/poster-manhwa-TWATF.jpeg", title: "Solo Leveling Next", chapter: "Ch. 24", rating: "4.8", genre: "Fantasy", type: "Manhwa" },
-    { id: 3, image: "/poster-manhwa-TWATF.jpeg", title: "Return of the King", chapter: "Ch. 89", rating: "4.7", genre: "Adventure", type: "Manhua" },
-    { id: 4, image: "/poster-manhwa-TWATF.jpeg", title: "Demon Slayer Spin-off", chapter: "Ch. 05", rating: "4.9", genre: "Action", type: "Manga" },
-    { id: 5, image: "/poster-manhwa-TWATF.jpeg", title: "Isekai Labyrinth", chapter: "Ch. 61", rating: "4.5", genre: "Isekai", type: "Manga" },
-    { id: 6, image: "/poster-manhwa-TWATF.jpeg", title: "Pedang Terakhir", chapter: "Ch. 142", rating: "4.9", genre: "Action", type: "Manhwa" },
-    { id: 7, image: "/poster-manhwa-TWATF.jpeg", title: "Solo Leveling Next", chapter: "Ch. 24", rating: "4.8", genre: "Fantasy", type: "Manhwa" },
-    { id: 8, image: "/poster-manhwa-TWATF.jpeg", title: "Return of the King", chapter: "Ch. 89", rating: "4.7", genre: "Adventure", type: "Manhua" },
-    { id: 9, image: "/poster-manhwa-TWATF.jpeg", title: "Demon Slayer Spin-off", chapter: "Ch. 05", rating: "4.9", genre: "Action", type: "Manga" },
-    { id: 10, image: "/poster-manhwa-TWATF.jpeg", title: "Isekai Labyrinth", chapter: "Ch. 61", rating: "4.5", genre: "Isekai", type: "Manga" },
-];
+const popularData: MangaCard[] = [];
 
 
 export default function Home() {

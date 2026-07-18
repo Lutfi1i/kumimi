@@ -65,7 +65,7 @@ export function MangaCard({ manga, style }: MangaCardProps) {
       {/* Cover */}
       <div
         className={cn(
-          "relative w-full aspect-3/4 rounded-lg overflow-hidden border border-[#e0e0e0]",
+          "relative w-full aspect-3/4 rounded-lg overflow-hidden border border-[#e0e0e0] dark:border-neutral-800",
           "transition-all duration-300",
           "group-hover:-translate-y-1.5 group-hover:scale-[1.02]"
         )}
@@ -87,17 +87,44 @@ export function MangaCard({ manga, style }: MangaCardProps) {
         {/* Bottom gradient overlay */}
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/30 to-transparent pointer-events-none" />
 
+        {/* Small flag badge bottom-right */}
+        {manga.type && (
+          <div className="absolute bottom-2 right-2 z-10 bg-white/90 dark:bg-neutral-900/90 px-1.5 py-0.5 rounded text-[9px] font-extrabold shadow-sm flex items-center gap-1.5 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white select-none">
+            {manga.type === "Manga" && (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <span>JP</span>
+              </>
+            )}
+            {manga.type === "Manhwa" && (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <span>KR</span>
+              </>
+            )}
+            {manga.type === "Manhua" && (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <span>CN</span>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Hover overlay */}
-        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+        <div className="absolute inset-0 bg-white/85 dark:bg-neutral-900/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
           <div className="space-y-2">
             {/* Title */}
-            <h3 className="text-[13px] font-bold text-black line-clamp-2">
+            <h3 className="text-[13px] font-bold text-black dark:text-white line-clamp-2">
               {manga.title}
             </h3>
 
             {/* Author */}
             {manga.author && (
-              <p className="text-[11px] text-[#666] font-semibold">
+              <p className="text-[11px] text-[#666] dark:text-neutral-300 font-semibold">
                 {manga.author}
               </p>
             )}
@@ -106,12 +133,12 @@ export function MangaCard({ manga, style }: MangaCardProps) {
             <div className="space-y-1">
               {manga.chapter > 0 && (
                 <>
-                  <div className="inline-block bg-black/10 px-2 py-1 rounded-sm">
-                    <span className="text-[10px] font-bold text-black">
+                  <div className="inline-block bg-black/10 dark:bg-white/10 px-2 py-1 rounded-sm">
+                    <span className="text-[10px] font-bold text-black dark:text-white">
                       #{manga.chapter}
                     </span>
                   </div>
-                  <p className="text-[10px] text-[#666]">
+                  <p className="text-[10px] text-[#666] dark:text-neutral-400">
                     Chapter {manga.chapter}: {manga.title}
                   </p>
                 </>
@@ -120,7 +147,7 @@ export function MangaCard({ manga, style }: MangaCardProps) {
 
             {/* View count or rating */}
             {manga.views && (
-              <p className="text-[10px] text-[#999] font-semibold">
+              <p className="text-[10px] text-[#999] dark:text-neutral-500 font-semibold">
                 {manga.views}
               </p>
             )}
@@ -130,10 +157,10 @@ export function MangaCard({ manga, style }: MangaCardProps) {
 
       {/* Info */}
       <div>
-        <p className="text-[0.78rem] font-semibold text-black leading-tight truncate">
+        <p className="text-[0.78rem] font-semibold text-neutral-900 dark:text-neutral-200 leading-tight truncate">
           {manga.title}
         </p>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[0.7rem] text-[#666]">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[0.7rem] text-[#666] dark:text-neutral-400">
           {manga.type && (
             <span className="text-[9px] font-bold bg-[#ffcb05]/15 text-[#bfa004] px-1.5 py-0.2 rounded-sm select-none shrink-0 font-mono">
               {manga.type.toUpperCase()}

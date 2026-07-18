@@ -19,12 +19,12 @@ export function TrendingSeries({ trending, popular }: TrendingSeriesProps) {
     <section className="mb-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[26px] font-bold text-black">
+        <h2 className="text-[26px] font-bold text-neutral-900 dark:text-white">
           Trending &amp; Popular Series
         </h2>
         <Link
           href="/popular"
-          className="font-bold text-[13px] text-black hover:underline underline-offset-2 flex items-center gap-1"
+          className="font-bold text-[13px] text-neutral-800 dark:text-[#ff6740] hover:underline underline-offset-2 flex items-center gap-1"
         >
           View all
           <span className="text-[14px]">→</span>
@@ -36,10 +36,10 @@ export function TrendingSeries({ trending, popular }: TrendingSeriesProps) {
         <button
           onClick={() => setActiveTab("trending")}
           className={cn(
-            "px-5 py-3 rounded-full text-[14px] font-semibold transition-all duration-150",
+            "px-5 py-3 rounded-full text-[14px] font-bold transition-all duration-150 cursor-pointer",
             activeTab === "trending"
-              ? "bg-black text-white"
-              : "bg-[#f3f3f3] text-black hover:bg-[#e8e8e8]"
+              ? "bg-black dark:bg-white text-white dark:text-black"
+              : "bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-300 hover:bg-[#e8e8e8] dark:hover:bg-neutral-800"
           )}
         >
           Trending
@@ -47,10 +47,10 @@ export function TrendingSeries({ trending, popular }: TrendingSeriesProps) {
         <button
           onClick={() => setActiveTab("popular")}
           className={cn(
-            "px-5 py-3 rounded-full text-[14px] font-semibold transition-all duration-150",
+            "px-5 py-3 rounded-full text-[14px] font-bold transition-all duration-150 cursor-pointer",
             activeTab === "popular"
-              ? "bg-black text-white"
-              : "bg-[#f3f3f3] text-black hover:bg-[#e8e8e8]"
+              ? "bg-black dark:bg-white text-white dark:text-black"
+              : "bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-300 hover:bg-[#e8e8e8] dark:hover:bg-neutral-800"
           )}
         >
           Popular
@@ -82,7 +82,7 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
           </span>
           {/* Chapter badge */}
           {manga.chapter > 0 && (
-            <span className="mt-1 ml-1 bg-white/90 text-[11px] font-bold text-black px-1.5 py-0.5 rounded-sm">
+            <span className="mt-1 ml-1 bg-white/90 dark:bg-neutral-900/90 text-[11px] font-bold text-black dark:text-white px-1.5 py-0.5 rounded-sm">
               Ch. {manga.chapter}
             </span>
           )}
@@ -106,15 +106,42 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
 
         {/* Bottom gradient overlay */}
         <div className="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-black/40 to-transparent pointer-events-none" />
+
+        {/* Small flag badge bottom-right */}
+        {manga.type && (
+          <div className="absolute bottom-2.5 right-2.5 z-10 bg-white/90 dark:bg-neutral-900/90 px-1.5 py-0.5 rounded text-[9px] font-extrabold shadow-sm flex items-center gap-1.5 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white select-none">
+            {manga.type === "Manga" && (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <span>JP</span>
+              </>
+            )}
+            {manga.type === "Manhwa" && (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <span>KR</span>
+              </>
+            )}
+            {manga.type === "Manhua" && (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <span>CN</span>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Info */}
       <div className="mt-2">
-        <p className="text-[0.82rem] font-semibold text-black leading-tight truncate">
+        <p className="text-[0.82rem] font-semibold text-neutral-900 dark:text-white leading-tight truncate">
           {manga.title}
         </p>
         {manga.genre && (
-          <p className="text-[0.7rem] text-[#666] mt-0.5">
+          <p className="text-[0.7rem] text-neutral-500 dark:text-neutral-450 mt-0.5">
             {manga.genre}
           </p>
         )}

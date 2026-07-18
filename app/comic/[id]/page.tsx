@@ -84,10 +84,28 @@ export default async function ComicDetailPage({
             )}
             
             {/* Small flag badge bottom-right */}
-            <div className="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-neutral-900/95 px-1.5 py-0.5 rounded text-[10px] font-extrabold shadow-sm flex items-center gap-1 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white select-none">
-              {type === "Manga" && <span>🇯🇵 JP</span>}
-              {type === "Manhwa" && <span>🇰🇷 KR</span>}
-              {type === "Manhua" && <span>🇨🇳 CN</span>}
+            <div className="absolute bottom-2.5 right-2.5 bg-white/95 dark:bg-neutral-900/95 px-1.5 py-0.5 rounded text-[10px] font-extrabold shadow-sm flex items-center gap-1.5 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white select-none">
+              {type === "Manga" && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                  <span>JP</span>
+                </>
+              )}
+              {type === "Manhwa" && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                  <span>KR</span>
+                </>
+              )}
+              {type === "Manhua" && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                  <span>CN</span>
+                </>
+              )}
             </div>
             
             {/* Index Badge top-left */}
@@ -141,11 +159,11 @@ export default async function ComicDetailPage({
               </span>
             </div>
 
-            {/* Rating */}
-            <div className="flex items-center gap-1 mt-3.5 text-xs font-bold text-neutral-600 dark:text-neutral-300">
+            {/* Sementara aja non-aktif/gak ditampilin [bukan ai yg nulis] Rating */}
+            {/* <div className="flex items-center gap-1 mt-3.5 text-xs font-bold text-neutral-600 dark:text-neutral-300">
               <Star size={14} className="fill-amber-400 stroke-amber-400" />
               <span>7.80</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

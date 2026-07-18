@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import type { Manga } from "@/types/manga";
 import { getMockMangas } from "@/lib/mock-data";
 
+
 function HeroCover({ manga }: { manga: Manga }) {
   if (manga.coverUrl) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -46,48 +47,68 @@ export function HeroSection({ featured }: HeroSectionProps) {
 
   return (
     <section className="mb-8">
-      <div className="relative rounded-[20px] overflow-hidden border border-[#e0e0e0] bg-white">
-        <div className="flex flex-col md:flex-row items-center gap-8 p-8 md:p-10">
-          {/* Text */}
-          <div className="flex-1 text-left space-y-4 z-10">
-            <div className="inline-flex items-center gap-1.5 bg-black/5 text-black text-[0.7rem] font-bold tracking-widest uppercase px-3 py-1 rounded-full">
-              <Sparkles size={12} className="text-black" />
-              Kumimi Select
-            </div>
+      <div className="relative rounded-[24px] overflow-hidden border border-black/10 dark:border-neutral-800 bg-white dark:bg-[#151618] h-[280px] select-none">
+        
+        {/* Blurred backdrop background */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          {active.coverUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img 
+              src={active.coverUrl} 
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover scale-125 blur-[40px] brightness-[0.7] origin-center transition-all duration-700 ease-in-out" 
+            />
+          )}
+          {/* Gradients to fade to white on the right and bottom */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-white dark:to-[#151618] to-[85%]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#151618] via-white/45 dark:via-[#151618]/45 via-transparent to-transparent from-[0%] via-[12%] via-[40%]" />
+        </div>
 
-            <h1 className="text-[32px] font-bold leading-[1.2] text-black">
+        {/* Content Container */}
+        <div className="relative h-full flex items-center justify-between p-8 md:p-10 z-10">
+          {/* Text content on the left */}
+          <div 
+            key={`text-${active.id}`}
+            className="flex-1 text-left flex flex-col justify-center h-full max-w-[60%] z-10 space-y-3 pb-8 animate-fade-up"
+          >
+            <h1 className="text-2xl md:text-[34px] font-extrabold leading-[1.15] text-white tracking-tight drop-shadow-xs line-clamp-2">
               {active.title}
             </h1>
 
-            <p className="text-[#666] text-[14px]">
+            <p className="text-white/80 text-[14px] font-medium tracking-wide">
               {active.genre ?? "Manga"}
-              {active.chapter > 0 ? ` - Chapter ${active.chapter}` : ""}
+              {active.chapter > 0 ? ` • Chapter ${active.chapter}` : ""}
             </p>
 
-            <Link
-              href={`/comic/${active.id}`}
-              className="inline-flex items-center justify-center gap-2 bg-black hover:bg-[#1a1a1a] text-white text-[14px] font-bold h-[40px] px-6 rounded-full transition-all duration-150"
-            >
-              <BookOpen size={16} /> Baca Sekarang
-            </Link>
+            <div className="pt-2">
+              <Link
+                href={`/comic/${active.slug ?? active.id}`}
+                className="inline-flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white text-[14px] font-bold h-[42px] px-6 rounded-full border border-white/25 shadow-xs backdrop-blur-md transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+              >
+                <BookOpen size={16} className="text-white" /> Baca Sekarang
+              </Link>
+            </div>
           </div>
 
-          {/* Cover */}
-          <div className="w-40 sm:w-48 aspect-[3/4] rounded-lg overflow-hidden border border-[#e0e0e0] shrink-0 shadow-sm">
+          {/* Cover image on the right */}
+          <div 
+            key={`cover-${active.id}`}
+            className="w-[140px] sm:w-[160px] aspect-[3/4] rounded-xl overflow-hidden border border-white/85 shrink-0 shadow-[0_12px_28px_rgba(0,0,0,0.22)] z-10 animate-fade-up hover:scale-[1.02] transition-transform duration-300"
+          >
             <HeroCover manga={active} />
           </div>
         </div>
 
-        {/* Carousel dots */}
-        <div className="flex items-center gap-2 px-8 pb-6">
+        {/* Carousel dots at the bottom-left */}
+        <div className="absolute bottom-6 left-8 flex items-center gap-2 z-20">
           {slides.map((_, i) => (
             <button
               key={i}
               aria-label={`Tampilkan slide ${i + 1}`}
               onClick={() => setIndex(i)}
               className={cn(
-                "h-2 rounded-full transition-all duration-200 cursor-pointer",
-                i === index ? "w-6 bg-black" : "w-2 bg-black/30 hover:bg-black/50"
+                "h-2 rounded-full transition-all duration-300 cursor-pointer",
+                i === index ? "w-6 bg-black" : "w-2 bg-black/20 hover:bg-black/40"
               )}
             />
           ))}

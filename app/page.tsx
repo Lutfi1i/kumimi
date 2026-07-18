@@ -2,7 +2,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/manga/HeroSection";
 import { HeroSectionSkeleton } from "@/components/manga/HeroSectionSkeleton";
 import { GenreBrowse } from "@/components/manga/GenreBrowse";
-import { MangaGrid } from "@/components/manga/MangaGrid";
+import { MangaGrid, FeaturedBanner } from "@/components/manga/MangaGrid";
 import { MangaGridSkeleton } from "@/components/manga/MangaGridSkeleton";
 import { UpdateRow } from "@/components/manga/UpdateRow";
 import { NowOnWebtoon } from "@/components/manga/NowOnWebtoon";
@@ -52,7 +52,7 @@ export default function Home() {
     <>
       <Navbar />
 
-      <div className="w-full bg-white">
+      <div className="w-full bg-neutral-50 dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 min-h-screen transition-colors duration-200">
         {/* Main container with responsive padding */}
         <div className="max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 lg:px-[120px] py-8">
           {/* Hero Section */}
@@ -80,8 +80,10 @@ export default function Home() {
             </Suspense>
           </div>
 
-          {/* Last placeholder section */}
-          <div className="mb-8 h-[326px] bg-[#f5f5f5] rounded-lg" />
+          {/* Last promo section */}
+          <div className="mt-8">
+            <FeaturedBanner />
+          </div>
         </div>
       </div>
     </>
