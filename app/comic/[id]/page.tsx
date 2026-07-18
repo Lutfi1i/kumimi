@@ -5,6 +5,8 @@ import { fetchMangaDetail } from "@/lib/api";
 import { getMangaById } from "@/lib/mock-data";
 import { ArrowLeft, BookOpen, Zap, Star } from "lucide-react";
 import { DetailChapters } from "@/components/manga/DetailChapters";
+import ButtonBack from "@/components/manga/ButtonBack";
+import { BookmarkButton } from "@/components/manga/BookMarkButton";
 
 export const dynamic = "force-dynamic";
 
@@ -64,17 +66,15 @@ export default async function ComicDetailPage({
           className="absolute inset-0 bg-cover bg-center scale-105 blur-3xl opacity-35 dark:opacity-45 pointer-events-none"
           style={{ backgroundImage: coverUrl ? `url("${coverUrl}")` : 'none' }}
         />
-        <Link
-            href="/"
-            className="inline-flex items-center lg:pl-36 mb-5 gap-2 text-xs font-bold text-[#ff6740] hover:underline"
-          >
-            <ArrowLeft size={14} /> Kembali ke Beranda
-          </Link>
-        
+
+      
         {/* Dark/Light overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-50/70 to-neutral-50 dark:from-transparent dark:via-[#0f0f10]/80 dark:to-[#0f0f10]" />
         <div className="relative max-w-7xl mx-auto px-5 md:px-8 z-10 flex flex-col md:flex-row gap-8 items-start md:items-end">
+          <div className="flex flex-col gap-3">
+
           {/* Cover image card */}
+          <ButtonBack />
           <div className="relative w-44 md:w-56 shrink-0 aspect-[3/4] overflow-hidden shadow-2xl bg-neutral-200 dark:bg-neutral-800 self-center md:self-auto">
             {coverUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -113,6 +113,7 @@ export default async function ComicDetailPage({
               1
             </div>
           </div>
+          </div>
 
           {/* Core Info details */}
           <div className="flex-1 min-w-0">
@@ -143,6 +144,14 @@ export default async function ComicDetailPage({
                 >
                   <Zap size={14} className="fill-[#ff6740] stroke-[#ff6740]" /> CHAPTER TERBARU ({chapters.length})
                 </Link>
+                <BookmarkButton
+                  comicId={id}
+                  slug={id}
+                  title={title}
+                  coverUrl={coverUrl}
+                  type={type}
+                  genre={genres[0]}
+                />
               </div>
             )}
 

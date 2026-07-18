@@ -93,7 +93,7 @@ export function HeroSection({ featured }: HeroSectionProps) {
           {/* Cover image on the right */}
           <div 
             key={`cover-${active.id}`}
-            className="w-[140px] sm:w-[160px] aspect-[3/4] rounded-xl overflow-hidden border border-white/85 shrink-0 shadow-[0_12px_28px_rgba(0,0,0,0.22)] z-10 animate-fade-up hover:scale-[1.02] transition-transform duration-300"
+            className="w-[140px] sm:w-[160px] aspect-[3/4] rounded-xl overflow-hidden  shrink-0 shadow-[0_12px_28px_rgba(0,0,0,0.22)] z-10 animate-fade-up hover:scale-[1.02] transition-transform duration-300"
           >
             <HeroCover manga={active} />
           </div>

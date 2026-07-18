@@ -74,7 +74,7 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
       className="group flex flex-col gap-0 cursor-pointer"
     >
       {/* Cover */}
-      <div className="relative w-full aspect-[232/301] rounded-lg overflow-hidden border border-border">
+      <div className="relative w-full aspect-[232/301] rounded-lg overflow-hidden ">
         {/* Rank number */}
         <div className="absolute top-0 left-0 z-10 flex items-start">
           <span className="font-display text-[52px] font-black text-white leading-none drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">

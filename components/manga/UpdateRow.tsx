@@ -13,7 +13,7 @@ interface UpdateRowProps {
 export function UpdateRow({ title = "Pembaruan Terbaru", mangas, href = "#" }: UpdateRowProps) {
   return (
     <div className="mb-8">
-      <div className="flex items-baseline justify-between mb-4">
+      <div className="flex items-baseline justify-between pb-4">
         <h2 className="text-[26px] font-bold text-neutral-900 dark:text-white">
           {title}
         </h2>

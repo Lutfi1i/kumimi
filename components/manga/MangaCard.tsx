@@ -1,8 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Bookmark } from "lucide-react";
 import { MangaBadge } from "@/components/ui/MangaBadge";
 import type { Manga } from "@/types/manga";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { isBookmarked, toggleBookmark, onBookmarksChanged } from "@/lib/bookmarks";
 
 interface MangaCardProps {
   manga: Manga;
@@ -56,6 +61,29 @@ export function getAbstractCover(mangaId: number, title: string, genre?: string)
 }
 
 export function MangaCard({ manga, style }: MangaCardProps) {
+  const comicId = String(manga.slug ?? manga.id);
+  const [bookmarked, setBookmarked] = useState(false);
+
+  useEffect(() => {
+    setBookmarked(isBookmarked(comicId));
+    const unsubscribe = onBookmarksChanged(() => setBookmarked(isBookmarked(comicId)));
+    return unsubscribe;
+  }, [comicId]);
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const next = toggleBookmark({
+      comicId,
+      slug: comicId,
+      title: manga.title,
+      coverUrl: manga.coverUrl,
+      type: manga.type,
+      genre: manga.genre,
+    });
+    setBookmarked(next);
+  };
+
   return (
     <Link
       href={`/comic/${manga.slug ?? manga.id}`}
@@ -65,12 +93,26 @@ export function MangaCard({ manga, style }: MangaCardProps) {
       {/* Cover */}
       <div
         className={cn(
-          "relative w-full aspect-3/4 rounded-lg overflow-hidden border border-[#e0e0e0] dark:border-neutral-800",
+          "relative w-full aspect-3/4 rounded-xl overflow-hidden border border-[#e0e0e0] dark:border-neutral-800",
           "transition-all duration-300",
           "group-hover:-translate-y-1.5 group-hover:scale-[1.02]"
         )}
       >
         <MangaBadge type={manga.badge} />
+
+        {/* Bookmark button — top right */}
+        <button
+          onClick={handleBookmarkClick}
+          aria-label={bookmarked ? "Hapus dari bookmark" : "Tambah ke bookmark"}
+          className={cn(
+            "absolute top-2 right-2 z-20 flex items-center justify-center w-7 h-7 rounded-full backdrop-blur-sm border transition-all duration-200",
+            bookmarked
+              ? "bg-[#ff6740] border-[#ff6740] text-white opacity-100"
+              : "bg-black/40 border-white/20 text-white opacity-0 group-hover:opacity-100 hover:bg-black/60"
+          )}
+        >
+          <Bookmark size={13} className={cn(bookmarked && "fill-white")} />
+        </button>
 
         {/* Cover image — swap abstract cover with <Image> when API is ready */}
         {manga.coverUrl ? (
@@ -177,4 +219,3 @@ export function MangaCard({ manga, style }: MangaCardProps) {
     </Link>
   );
 }
-

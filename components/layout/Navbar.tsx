@@ -8,11 +8,9 @@ import { fetchSearchResults } from "@/lib/api";
 import type { Manga } from "@/types/manga";
 
 const NAV_LINKS = [
-  { label: "ORIGINALS", href: "/originals" },
   { label: "KATEGORI", href: "/categories" },
-  { label: "PERINGKAT", href: "/rankings" },
-  { label: "KANVAS", href: "/canvas" },
   { label: "HISTORI", href: "/history" },
+  { label: "BOOKMARK", href: "/bookmarks" },
 ];
 
 function MascotLogo() {
