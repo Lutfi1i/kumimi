@@ -165,10 +165,15 @@ function HistoryCard({
 
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 to-transparent pointer-events-none" />
 
-          <div className="absolute bottom-2 left-2 right-2">
-            <span className="inline-block bg-[#ff6740] text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">
+          <div className="absolute bottom-2 left-2 right-2 flex flex-wrap gap-1">
+            <span className="inline-block bg-[#ff6740] text-white text-[10px] font-bold px-2 py-0.5 rounded-sm shadow-sm">
               Ch. {entry.lastChapterNumber}
             </span>
+            {entry.lastPageNumber && entry.lastPageNumber > 1 && (
+              <span className="inline-block bg-neutral-900/90 text-neutral-100 text-[10px] font-bold px-2 py-0.5 rounded-sm border border-neutral-700/50 shadow-sm">
+                Hal. {entry.lastPageNumber}
+              </span>
+            )}
           </div>
         </div>
 

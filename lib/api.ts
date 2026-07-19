@@ -49,10 +49,6 @@ export interface HomeData {
   recent: RecentManga[];
 }
 
-/**
- * Robust fetch helper with timeout that supports older Node.js/browsers
- * by falling back to AbortController if AbortSignal.timeout is not present.
- */
 async function fetchWithTimeout(url: string, options: RequestInit & { timeout?: number } = {}) {
   const { timeout = 8000, ...fetchOptions } = options;
 
@@ -132,36 +128,74 @@ export const fetchHomeData = cache(async (): Promise<HomeData | null> => {
   }
 
   try {
-    const pages = await Promise.all(
-      [1, 2].map((p) =>
-        fetchWithTimeout(`${API_BASE}/api/live/latest?page=${p}`, {
-          cache: "no-store",
-          timeout: 8000,
-        })
-          .then((r) =>
-            r.ok ? (r.json() as Promise<{ manga?: LiveTitle[] }>) : null,
-          )
-          .catch(() => null),
-      ),
-    );
+    const [rekomendasiRes, popularRes, latestRes] = await Promise.all([
+      fetchWithTimeout(`${API_BASE}/api/live/rekomendasi`, { cache: "no-store", timeout: 8000 }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetchWithTimeout(`${API_BASE}/api/live/popular`, { cache: "no-store", timeout: 8000 }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetchWithTimeout(`${API_BASE}/api/live/latest?page=1&limit=20`, { cache: "no-store", timeout: 8000 }).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
 
-    const list: Manga[] = pages.flatMap((p) => p?.manga ?? []).map(toManga);
-    if (list.length === 0) return null;
+    const liveToManga = (m: any): Manga => ({
+      id: 0,
+      title: m.title || "Untitled",
+      chapter: m.latestChapter ? Number((m.latestChapter.match(/\d+/) || ["0"])[0]) : 0,
+      badge: null,
+      coverUrl: m.coverUrl || undefined,
+      genre: undefined,
+      slug: m.slug || "",
+      author: undefined,
+      views: undefined,
+      type: m.type || undefined,
+    });
+
+    const popularList: Manga[] = (popularRes?.data ?? []).map(liveToManga);
+    const recommendedList: Manga[] = (rekomendasiRes?.data ?? []).map(liveToManga);
+    const latestRaw = latestRes?.manga || latestRes?.data || [];
+    const latestList: Manga[] = latestRaw.map(liveToManga);
+
+    if (popularList.length === 0 && recommendedList.length === 0 && latestList.length === 0) {
+      const types = ['manga', 'manhwa', 'manhua'];
+      const allResults = await Promise.all(
+        types.flatMap((type) =>
+          [1].map((p) =>
+            fetchWithTimeout(`${API_BASE}/api/live/latest?source=komiku&type=${type}&page=${p}&limit=20`, {
+              cache: "no-store",
+              timeout: 8000,
+            })
+              .then((r) => r.ok ? (r.json() as Promise<{ manga?: LiveTitle[] }>) : null)
+              .catch(() => null)
+          )
+        )
+      );
+      const list: Manga[] = allResults.flatMap((p) => p?.manga ?? []).map(toManga);
+      if (list.length === 0) return null;
+      return {
+        popular: list.slice(0, 21),
+        latest: list.slice(0, 14),
+        recommended: list.slice(7, 21),
+        featured: list.slice(0, 3),
+        ranked: list.slice(0, 8).map((m, i) => ({ ...m, rank: i + 1 })),
+        recent: list.slice(0, 6).map((m) => ({ ...m, updatedAt: "Baru" })),
+      };
+    }
+
+    const finalPopular = popularList.length > 0 ? popularList : latestList.slice(0, 21);
+    const finalRecommended = recommendedList.length > 0 ? recommendedList : finalPopular.slice(7, 21);
+    const finalLatest = latestList.length > 0 ? latestList : finalPopular.slice(0, 14);
 
     return {
-      popular: list.slice(0, 21),
-      latest: list.slice(0, 14),
-      recommended: list.slice(7, 21),
-      featured: list.slice(0, 3),
-      ranked: list.slice(0, 8).map((m, i) => ({ ...m, rank: i + 1 })),
-      recent: list.slice(0, 6).map((m) => ({ ...m, updatedAt: "Baru" })),
+      popular: finalPopular.slice(0, 21),
+      latest: finalLatest.slice(0, 14),
+      recommended: finalRecommended.slice(0, 14),
+      featured: finalRecommended.slice(0, 3),
+      ranked: finalPopular.slice(0, 8).map((m, i) => ({ ...m, rank: i + 1 })),
+      recent: finalLatest.slice(0, 6).map((m) => ({ ...m, updatedAt: "Baru" })),
     };
   } catch {
     return null;
   }
 });
 
-export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail | null> => {
+export const fetchMangaDetail = cache(async (slug: string, originalSlug?: string): Promise<MangaDetail | null> => {
   if (!/^\d+$/.test(slug)) {
     try {
       const searchTerm = slug.replace(/-/g, " ");
@@ -174,7 +208,7 @@ export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail 
         const results: any[] = searchJson.data || [];
         const matchedManga = results.find((m) => getSlug(m) === slug);
         if (matchedManga) {
-          return fetchMangaDetail(String(matchedManga.id));
+          return fetchMangaDetail(String(matchedManga.id), slug);
         }
       }
     } catch (err) {
@@ -207,20 +241,21 @@ export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail 
           }));
         }
 
-        // Record a page view in a non-blocking way
         fetchWithTimeout(`${API_BASE}/api/manga/${slug}/view`, { method: "POST" }).catch(() => {});
 
-        return {
-          title: m.title,
-          coverUrl: m.coverUrl || m.cover_url || undefined,
-          synopsis: m.synopsis ?? "",
-          genres: m.genres ?? [],
-          status: m.status?.toLowerCase() === "completed" ? "completed" : "ongoing",
-          type: (m.type ?? "Manga") as MangaDetail["type"],
-          slug,
-          chapters,
-          author: m.author ?? undefined,
-        };
+        if (chapters.length > 0) {
+          return {
+            title: m.title,
+            coverUrl: m.coverUrl || m.cover_url || undefined,
+            synopsis: m.synopsis ?? "",
+            genres: m.genres ?? [],
+            status: m.status?.toLowerCase() === "completed" ? "completed" : "ongoing",
+            type: (m.type ?? "Manga") as MangaDetail["type"],
+            slug: originalSlug || slug,
+            chapters,
+            author: m.author ?? undefined,
+          };
+        }
       }
     } catch (err) {
       console.error("fetchMangaDetail DB error:", err);
@@ -228,8 +263,9 @@ export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail 
   }
 
   try {
+    const liveSlug = originalSlug || slug;
     const res = await fetchWithTimeout(
-      `${API_BASE}/api/live/detail?slug=${encodeURIComponent(slug)}`,
+      `${API_BASE}/api/live/detail?slug=${encodeURIComponent(liveSlug)}`,
       { cache: "no-store", timeout: 10000 },
     );
     if (!res.ok) return null;
@@ -271,6 +307,7 @@ export const fetchMangaDetail = cache(async (slug: string): Promise<MangaDetail 
 export const fetchChapterPages = cache(async (
   mangaSlug: string,
   chapterSlug: string,
+  originalSlug?: string
 ): Promise<string[] | null> => {
   if (!/^\d+$/.test(mangaSlug)) {
     try {
@@ -284,7 +321,7 @@ export const fetchChapterPages = cache(async (
         const results: any[] = searchJson.data || [];
         const matchedManga = results.find((m) => getSlug(m) === mangaSlug);
         if (matchedManga) {
-          return fetchChapterPages(String(matchedManga.id), chapterSlug);
+          return fetchChapterPages(String(matchedManga.id), chapterSlug, mangaSlug);
         }
       }
     } catch (err) {
@@ -316,13 +353,20 @@ export const fetchChapterPages = cache(async (
   }
 
   try {
+    const liveManga = originalSlug || mangaSlug;
     const res = await fetchWithTimeout(
-      `${API_BASE}/api/live/read?slug=${encodeURIComponent(chapterSlug)}&manga=${encodeURIComponent(mangaSlug)}`,
+      `${API_BASE}/api/live/read?slug=${encodeURIComponent(chapterSlug)}&manga=${encodeURIComponent(liveManga)}`,
       { cache: "no-store", timeout: 10000 },
     );
     if (!res.ok) return null;
-    const json = (await res.json()) as { status: boolean; pages?: string[] };
-    return json.pages && json.pages.length > 0 ? json.pages : null;
+    const json = (await res.json()) as { status: boolean; pages?: any[] };
+    if (!json.pages || json.pages.length === 0) return null;
+    return json.pages.map((p: any) => {
+      if (typeof p === "object" && p.image_url) {
+        return p.image_url;
+      }
+      return p;
+    });
   } catch {
     return null;
   }
@@ -521,7 +565,6 @@ export const fetchSearchResults = cache(async (q: string): Promise<Manga[]> => {
     const seenTitles = new Set<string>();
     const merged: Manga[] = [];
 
-    // Add DB results first (preferred)
     for (const m of dbResults) {
       const norm = m.title.toLowerCase().replace(/[^a-z0-9]/g, "");
       if (!seenTitles.has(norm)) {
@@ -530,7 +573,6 @@ export const fetchSearchResults = cache(async (q: string): Promise<Manga[]> => {
       }
     }
 
-    // Add Live results if they haven't been added yet
     for (const m of liveResults) {
       const norm = m.title.toLowerCase().replace(/[^a-z0-9]/g, "");
       if (!seenTitles.has(norm)) {

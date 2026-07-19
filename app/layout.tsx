@@ -18,6 +18,13 @@ export const metadata: Metadata = {
   title: "Kumimi — Baca Komik, Manga, Manhwa & Manhua",
   description:
     "Kumimi adalah platform baca komik online untuk manga, manhwa, dan manhua terbaik dengan update chapter terbaru setiap hari.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

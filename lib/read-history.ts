@@ -7,6 +7,7 @@ export interface ReadHistoryEntry {
   genres?: string[];
   lastChapterNumber: number;
   lastChapterSlug: string;
+  lastPageNumber?: number;
   readAt: number;
   readSlugs: string[];
 }
@@ -44,6 +45,7 @@ export function markChapterRead(params: {
   genres?: string[];
   chapterNumber: number;
   chapterSlug: string;
+  pageNumber?: number;
 }) {
   const store = getStore();
   const existing = store[params.comicId];
@@ -52,6 +54,9 @@ export function markChapterRead(params: {
   if (!readSlugs.includes(params.chapterSlug)) {
     readSlugs.push(params.chapterSlug);
   }
+
+  // Preserve page number if same chapter, or update to new
+  const pageToStore = params.pageNumber ?? (existing?.lastChapterSlug === params.chapterSlug ? existing?.lastPageNumber : 1);
 
   store[params.comicId] = {
     comicId: params.comicId,
@@ -62,6 +67,7 @@ export function markChapterRead(params: {
     genres: params.genres,
     lastChapterNumber: params.chapterNumber,
     lastChapterSlug: params.chapterSlug,
+    lastPageNumber: pageToStore,
     readAt: Date.now(),
     readSlugs,
   };

@@ -78,12 +78,16 @@ export default async function ReaderPage({
         )}
       </main>
 
-      {/* Prev / Next chapter */}
-      {/* Prev / Next chapter */}
       <ChapterNav
         id={id}
         prevChapter={prevChapter}
         nextChapter={nextChapter}
+        chapters={sorted}
+        currentChapterSlug={chapter}
+        title={detail?.title ?? id}
+        coverUrl={detail?.coverUrl}
+        type={detail?.type}
+        genres={detail?.genres}
       />
 
       {/* Recommendations */}

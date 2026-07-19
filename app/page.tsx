@@ -5,8 +5,6 @@ import { GenreBrowse } from "@/components/manga/GenreBrowse";
 import { MangaGrid, FeaturedBanner } from "@/components/manga/MangaGrid";
 import { MangaGridSkeleton } from "@/components/manga/MangaGridSkeleton";
 import { UpdateRow } from "@/components/manga/UpdateRow";
-import { NowOnWebtoon } from "@/components/manga/NowOnWebtoon";
-import { NowOnWebtoonSkeleton } from "@/components/manga/NowOnWebtoonSkeleton";
 import { TrendingSeries } from "@/components/manga/TrendingSeries";
 import { TrendingSeriesSkeleton } from "@/components/manga/TrendingSeriesSkeleton";
 import { Suspense } from "react";
