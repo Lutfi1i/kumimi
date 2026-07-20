@@ -4,6 +4,7 @@ import { ReaderNavbar } from "@/components/layout/ReaderNavbar";
 import { ChapterNav } from "@/components/manga/ChapterNav";
 import { RecommendedComics } from "@/components/manga/RecommendedComics";
 import { MarkAsRead } from "@/components/manga/MarkAsRead";
+import { MangaPanel } from "@/components/manga/MangaPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -57,12 +58,11 @@ export default async function ReaderPage({
       <main className="max-w-3xl mx-auto w-full flex flex-col items-center">
         {pages ? (
           pages.map((src, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <MangaPanel
               key={i}
               src={src}
               alt={`Page ${i + 1}`}
-              className="w-full rounded-none block bg-neutral-950 reader-page-img"
+              pageNumber={i + 1}
             />
           ))
         ) : (
