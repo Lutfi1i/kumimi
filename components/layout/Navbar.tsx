@@ -289,7 +289,7 @@ export function Navbar() {
                               m.status?.toLowerCase() === "completed" ? "bg-[#3b82f6]" : "bg-[#22c55e]"
                             )} />
                             <span className={m.status?.toLowerCase() === "completed" ? "text-[#3b82f6]" : "text-[#22c55e]"}>
-                              {m.status || "Ongoing"}
+                              {m.status}
                             </span>
                             {m.type && (
                               <span className="ml-1 text-[8px] bg-black/5 dark:bg-white/10 text-gray-500 dark:text-gray-300 px-1.5 py-0.2 rounded font-mono">

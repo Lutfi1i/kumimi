@@ -52,6 +52,13 @@ export interface HomeData {
 async function fetchWithTimeout(url: string, options: RequestInit & { timeout?: number } = {}) {
   const { timeout = 8000, ...fetchOptions } = options;
 
+  // Add API authorization token for backend API endpoints
+  const headers = new Headers(fetchOptions.headers || {});
+  if (url.startsWith(API_BASE) || url.startsWith('/api')) {
+    headers.set('Authorization', `Bearer ${process.env.KUMIMI_API_KEY || 'MiguelNiger1223'}`);
+  }
+  fetchOptions.headers = headers;
+
   if (typeof AbortSignal !== "undefined" && "timeout" in AbortSignal) {
     try {
       return await fetch(url, {
