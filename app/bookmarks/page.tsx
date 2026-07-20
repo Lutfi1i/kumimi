@@ -100,7 +100,7 @@ export default function BookmarksPage() {
               />
               <Link
                 href="/"
-                className="mt-6 text-xs font-semibold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 px-4 py-2 rounded-md hover:opacity-90 transition-opacity"
+                className="mt-6 text-xs font-bold bg-[#ff6740] hover:bg-[#e05330] text-white px-5 py-2.5 rounded-lg transition-all duration-150 shadow-md cursor-pointer select-none"
               >
                 Mulai Jelajah Komik
               </Link>
