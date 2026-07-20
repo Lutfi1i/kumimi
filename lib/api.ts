@@ -385,98 +385,26 @@ export const fetchGenreMangaPaged = cache(async (
   page = 1,
   limit = 21
 ): Promise<{ data: Manga[]; total: number; totalPages: number }> => {
-  try {
-    const params = new URLSearchParams();
-    if (slug && slug !== "all") {
-      params.append("genre", slug);
-    }
-    if (type) {
-      params.append("type", type);
-    }
-    params.append("page", page.toString());
-    params.append("limit", limit.toString());
+  let dbTotal = 0;
+  
+  // Query DB and Live Scraper in parallel for hybrid list
+  const dbPromise = (async () => {
+    try {
+      const params = new URLSearchParams();
+      if (slug && slug !== "all") params.append("genre", slug);
+      if (type) params.append("type", type);
+      params.append("page", page.toString());
+      params.append("limit", limit.toString());
 
-    const res = await fetchWithTimeout(`${API_BASE}/api/manga?${params.toString()}`, {
-      cache: "no-store",
-      timeout: 8000,
-    });
-    if (res.ok) {
-      const json = await res.json();
-      const list = json.data || [];
-      const data = list.map((m: any) => ({
-        id: m.id,
-        title: m.title,
-        chapter: 0,
-        badge: null,
-        coverUrl: m.coverUrl || m.cover_url || undefined,
-        genre: m.genres?.[0] || undefined,
-        slug: getSlug(m),
-        author: m.author || undefined,
-        views: m.views ? String(m.views) : undefined,
-        type: m.type || undefined,
-      }));
-      return {
-        data,
-        total: json.pagination?.total ?? data.length,
-        totalPages: json.pagination?.totalPages ?? 1,
-      };
-    }
-  } catch (err) {
-    console.error("fetchGenreMangaPaged DB error:", err);
-  }
-
-  try {
-    const params = new URLSearchParams();
-    if (slug) params.append("slug", slug);
-    if (type) params.append("type", type);
-    params.append("page", page.toString());
-
-    const res = await fetchWithTimeout(
-      `${API_BASE}/api/live/genre?${params.toString()}`,
-      { cache: "no-store", timeout: 8000 },
-    );
-    if (!res.ok) return { data: [], total: 0, totalPages: 1 };
-    const json = (await res.json()) as { manga?: LiveTitle[] };
-    const data = (json.manga ?? []).map((t, i) => {
-      const manga = toManga(t, i);
-      if (!manga.genre && slug !== "all") {
-        manga.genre = slug;
-      }
-      if (type && ['Manga', 'Manhwa', 'Manhua'].includes(type)) {
-        manga.type = type as any;
-      }
-      return manga;
-    });
-    const hasNext = data.length >= 20;
-    return {
-      data,
-      total: hasNext ? (page + 1) * limit : page * limit,
-      totalPages: hasNext ? page + 10 : page,
-    };
-  } catch {
-    return { data: [], total: 0, totalPages: 1 };
-  }
-});
-
-export const fetchGenreManga = cache(async (slug: string, type?: string): Promise<Manga[]> => {
-  try {
-    const params = new URLSearchParams();
-    if (slug && slug !== "all") {
-      params.append("genre", slug);
-    }
-    if (type) {
-      params.append("type", type);
-    }
-
-    const res = await fetchWithTimeout(`${API_BASE}/api/manga?${params.toString()}`, {
-      cache: "no-store",
-      timeout: 8000,
-    });
-    if (res.ok) {
-      const json = await res.json();
-      const list = json.data || [];
-      if (list.length > 0) {
-        return list.map((m: any, i: number) => ({
+      const res = await fetchWithTimeout(`${API_BASE}/api/manga?${params.toString()}`, {
+        cache: "no-store",
+        timeout: 6000,
+      });
+      if (res.ok) {
+        const json = await res.json();
+        dbTotal = json.pagination?.total ?? 0;
+        const list = json.data || [];
+        return list.map((m: any) => ({
           id: m.id,
           title: m.title,
           chapter: 0,
@@ -487,34 +415,148 @@ export const fetchGenreManga = cache(async (slug: string, type?: string): Promis
           author: m.author || undefined,
           views: m.views ? String(m.views) : undefined,
           type: m.type || undefined,
-        }));
+        })) as Manga[];
       }
+    } catch (err) {
+      console.error("fetchGenreMangaPaged DB error:", err);
     }
-  } catch (err) {
-    console.error("fetchGenreManga DB error:", err);
-  }
+    return [] as Manga[];
+  })();
+
+  const livePromise = (async () => {
+    try {
+      const params = new URLSearchParams();
+      if (slug) params.append("slug", slug);
+      if (type) params.append("type", type);
+      params.append("page", page.toString());
+
+      const res = await fetchWithTimeout(
+        `${API_BASE}/api/live/genre?${params.toString()}`,
+        { cache: "no-store", timeout: 8000 }
+      );
+      if (res.ok) {
+        const json = (await res.json()) as { manga?: LiveTitle[] };
+        return (json.manga ?? []).map((t, i) => {
+          const manga = toManga(t, i);
+          if (!manga.genre && slug !== "all") manga.genre = slug;
+          if (type && ['Manga', 'Manhwa', 'Manhua'].includes(type)) manga.type = type as any;
+          return manga;
+        });
+      }
+    } catch (err) {
+      console.error("fetchGenreMangaPaged Live error:", err);
+    }
+    return [] as Manga[];
+  })();
 
   try {
-    const params = new URLSearchParams();
-    if (slug) params.append("slug", slug);
-    if (type) params.append("type", type);
+    const [dbData, liveData] = await Promise.all([dbPromise, livePromise]);
 
-    const res = await fetchWithTimeout(
-      `${API_BASE}/api/live/genre?${params.toString()}`,
-      { cache: "no-store", timeout: 8000 },
-    );
-    if (!res.ok) return [];
-    const json = (await res.json()) as { manga?: LiveTitle[] };
-    return (json.manga ?? []).map((t, i) => {
-      const manga = toManga(t, i);
-      if (!manga.genre && slug !== "all") {
-        manga.genre = slug;
+    // Merge: DB items on top, then append Live items while removing duplicates by title
+    const seenTitles = new Set<string>();
+    const merged: Manga[] = [];
+
+    const addManga = (m: Manga) => {
+      const norm = m.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (!seenTitles.has(norm)) {
+        seenTitles.add(norm);
+        merged.push(m);
       }
-      if (type && ['Manga', 'Manhwa', 'Manhua'].includes(type)) {
-        manga.type = type as any;
+    };
+
+    dbData.forEach(addManga);
+    liveData.forEach(addManga);
+
+    // If we have actual DB total, use it. Otherwise fallback to estimated count from live scraper
+    const hasNext = liveData.length >= 20 || dbData.length >= limit;
+    const finalTotal = dbTotal > 0 ? dbTotal : (hasNext ? (page + 1) * limit : merged.length);
+    const finalTotalPages = dbTotal > 0 ? Math.ceil(dbTotal / limit) : (hasNext ? page + 10 : page);
+    
+    return {
+      data: merged,
+      total: finalTotal,
+      totalPages: finalTotalPages,
+    };
+  } catch {
+    return { data: [], total: 0, totalPages: 1 };
+  }
+});
+
+export const fetchGenreManga = cache(async (slug: string, type?: string): Promise<Manga[]> => {
+  const dbPromise = (async () => {
+    try {
+      const params = new URLSearchParams();
+      if (slug && slug !== "all") params.append("genre", slug);
+      if (type) params.append("type", type);
+
+      const res = await fetchWithTimeout(`${API_BASE}/api/manga?${params.toString()}`, {
+        cache: "no-store",
+        timeout: 6000,
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const list = json.data || [];
+        return list.map((m: any) => ({
+          id: m.id,
+          title: m.title,
+          chapter: 0,
+          badge: null,
+          coverUrl: m.coverUrl || m.cover_url || undefined,
+          genre: m.genres?.[0] || undefined,
+          slug: getSlug(m),
+          author: m.author || undefined,
+          views: m.views ? String(m.views) : undefined,
+          type: m.type || undefined,
+        })) as Manga[];
       }
-      return manga;
-    });
+    } catch (err) {
+      console.error("fetchGenreManga DB error:", err);
+    }
+    return [] as Manga[];
+  })();
+
+  const livePromise = (async () => {
+    try {
+      const params = new URLSearchParams();
+      if (slug) params.append("slug", slug);
+      if (type) params.append("type", type);
+
+      const res = await fetchWithTimeout(
+        `${API_BASE}/api/live/genre?${params.toString()}`,
+        { cache: "no-store", timeout: 8000 }
+      );
+      if (res.ok) {
+        const json = (await res.json()) as { manga?: LiveTitle[] };
+        return (json.manga ?? []).map((t, i) => {
+          const manga = toManga(t, i);
+          if (!manga.genre && slug !== "all") manga.genre = slug;
+          if (type && ['Manga', 'Manhwa', 'Manhua'].includes(type)) manga.type = type as any;
+          return manga;
+        });
+      }
+    } catch (err) {
+      console.error("fetchGenreManga Live error:", err);
+    }
+    return [] as Manga[];
+  })();
+
+  try {
+    const [dbData, liveData] = await Promise.all([dbPromise, livePromise]);
+    const seenTitles = new Set<string>();
+    const merged: Manga[] = [];
+
+    const addManga = (m: Manga) => {
+      const norm = m.title.toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (!seenTitles.has(norm)) {
+        seenTitles.add(norm);
+        merged.push(m);
+      }
+    };
+
+    dbData.forEach(addManga);
+    liveData.forEach(addManga);
+
+    return merged;
   } catch {
     return [];
   }
