@@ -16,27 +16,27 @@ export function TrendingSeries({ trending, popular }: TrendingSeriesProps) {
   const items = activeTab === "trending" ? trending : popular;
 
   return (
-    <section className="mb-8">
+    <section className="mb-6 sm:mb-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[26px] font-bold text-neutral-900 dark:text-white">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h2 className="text-xl sm:text-[26px] font-bold text-neutral-900 dark:text-white">
           Trending &amp; Popular Series
         </h2>
         <Link
           href="/popular"
-          className="font-bold text-[13px] text-neutral-800 dark:text-[#ff6740] hover:underline underline-offset-2 flex items-center gap-1"
+          className="font-bold text-xs sm:text-[13px] text-neutral-800 dark:text-[#ff6740] hover:underline underline-offset-2 flex items-center gap-1 shrink-0"
         >
           View all
-          <span className="text-[14px]">→</span>
+          <span className="text-xs sm:text-[14px]">→</span>
         </Link>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 pb-4">
+      <div className="flex gap-2 pb-3 sm:pb-4">
         <button
           onClick={() => setActiveTab("trending")}
           className={cn(
-            "px-5 py-3 rounded-full text-[14px] font-bold transition-all duration-150 cursor-pointer",
+            "px-3.5 sm:px-5 py-2 sm:py-3 rounded-full text-xs sm:text-[14px] font-bold transition-all duration-150 cursor-pointer",
             activeTab === "trending"
               ? "bg-black dark:bg-white text-white dark:text-black"
               : "bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-300 hover:bg-[#e8e8e8] dark:hover:bg-neutral-800"
@@ -47,7 +47,7 @@ export function TrendingSeries({ trending, popular }: TrendingSeriesProps) {
         <button
           onClick={() => setActiveTab("popular")}
           className={cn(
-            "px-5 py-3 rounded-full text-[14px] font-bold transition-all duration-150 cursor-pointer",
+            "px-3.5 sm:px-5 py-2 sm:py-3 rounded-full text-xs sm:text-[14px] font-bold transition-all duration-150 cursor-pointer",
             activeTab === "popular"
               ? "bg-black dark:bg-white text-white dark:text-black"
               : "bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-300 hover:bg-[#e8e8e8] dark:hover:bg-neutral-800"
@@ -58,7 +58,7 @@ export function TrendingSeries({ trending, popular }: TrendingSeriesProps) {
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
         {items.map((manga, i) => (
           <TrendingCard key={manga.id} manga={manga} rank={i + 1} />
         ))}
@@ -77,12 +77,12 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
       <div className="relative w-full aspect-[232/301] rounded-lg overflow-hidden ">
         {/* Rank number */}
         <div className="absolute top-0 left-0 z-10 flex items-start">
-          <span className="font-display text-[52px] font-black text-white leading-none drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
+          <span className="font-display text-[36px] sm:text-[52px] font-black text-white leading-none drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
             {rank}
           </span>
           {/* Chapter badge */}
           {manga.chapter > 0 && (
-            <span className="mt-1 ml-1 bg-white/90 dark:bg-neutral-900/90 text-[11px] font-bold text-black dark:text-white px-1.5 py-0.5 rounded-sm">
+            <span className="mt-0.5 sm:mt-1 ml-0.5 sm:ml-1 bg-white/90 dark:bg-neutral-900/90 text-[9px] sm:text-[11px] font-bold text-black dark:text-white px-1.5 py-0.5 rounded-sm">
               Ch. {manga.chapter}
             </span>
           )}
@@ -98,7 +98,7 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-indigo-600 to-cyan-500 flex items-center justify-center">
-            <span className="text-4xl font-black text-white/20 font-display">
+            <span className="text-3xl sm:text-4xl font-black text-white/20 font-display">
               {manga.title.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}
             </span>
           </div>
@@ -109,25 +109,25 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
 
         {/* Small flag badge bottom-right */}
         {manga.type && (
-          <div className="absolute bottom-2.5 right-2.5 z-10 bg-white/90 dark:bg-neutral-900/90 px-1.5 py-0.5 rounded text-[9px] font-extrabold shadow-sm flex items-center gap-1.5 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white select-none">
+          <div className="absolute bottom-2 right-2 z-10 bg-white/90 dark:bg-neutral-900/90 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-extrabold shadow-sm flex items-center gap-1 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white select-none">
             {manga.type === "Manga" && (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3 h-2 sm:w-3.5 sm:h-2.5 object-cover rounded-[1px]" />
                 <span>JP</span>
               </>
             )}
             {manga.type === "Manhwa" && (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3 h-2 sm:w-3.5 sm:h-2.5 object-cover rounded-[1px]" />
                 <span>KR</span>
               </>
             )}
             {manga.type === "Manhua" && (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3 h-2 sm:w-3.5 sm:h-2.5 object-cover rounded-[1px]" />
                 <span>CN</span>
               </>
             )}
@@ -136,12 +136,12 @@ function TrendingCard({ manga, rank }: { manga: Manga; rank: number }) {
       </div>
 
       {/* Info */}
-      <div className="mt-2">
-        <p className="text-[0.82rem] font-semibold text-neutral-900 dark:text-white leading-tight truncate">
+      <div className="mt-1.5">
+        <p className="text-xs sm:text-[0.82rem] font-semibold text-neutral-900 dark:text-white leading-snug line-clamp-2">
           {manga.title}
         </p>
         {manga.genre && (
-          <p className="text-[0.7rem] text-neutral-500 dark:text-neutral-450 mt-0.5">
+          <p className="text-[0.68rem] sm:text-[0.7rem] text-neutral-500 dark:text-neutral-450 mt-0.5">
             {manga.genre}
           </p>
         )}

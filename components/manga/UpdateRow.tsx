@@ -12,22 +12,22 @@ interface UpdateRowProps {
 
 export function UpdateRow({ title = "Pembaruan Terbaru", mangas, href = "#" }: UpdateRowProps) {
   return (
-    <div className="mb-8">
-      <div className="flex items-baseline justify-between pb-4">
-        <h2 className="text-[26px] font-bold text-neutral-900 dark:text-white">
+    <div className="mb-6 sm:mb-8">
+      <div className="flex items-baseline justify-between pb-3 sm:pb-4">
+        <h2 className="text-xl sm:text-[26px] font-bold text-neutral-900 dark:text-white">
           {title}
         </h2>
         <Link
           href={href}
-          className="text-[13px] text-neutral-800 dark:text-[#ff6740] font-bold hover:underline underline-offset-2"
+          className="text-xs sm:text-[13px] text-neutral-800 dark:text-[#ff6740] font-bold hover:underline underline-offset-2 shrink-0"
         >
           Lihat Semua →
         </Link>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 -mx-1 px-1">
+      <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar pb-2 -mx-1 px-1">
         {mangas.map((manga) => (
-          <div key={manga.id} className="shrink-0 w-[160px] sm:w-[180px]">
+          <div key={manga.id} className="shrink-0 w-[135px] xs:w-[150px] sm:w-[180px]">
             <MangaCard manga={manga} />
           </div>
         ))}

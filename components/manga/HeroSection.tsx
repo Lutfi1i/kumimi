@@ -46,8 +46,8 @@ export function HeroSection({ featured }: HeroSectionProps) {
   const active = slides[index];
 
   return (
-    <section className="mb-8">
-      <div className="relative rounded-[24px] overflow-hidden border border-black/10 dark:border-neutral-800 bg-white dark:bg-[#151618] h-[280px] select-none">
+    <section className="mb-5 sm:mb-8">
+      <div className="relative rounded-2xl sm:rounded-[24px] overflow-hidden border border-black/10 dark:border-neutral-800 bg-white dark:bg-[#151618] h-[200px] xs:h-[230px] sm:h-[280px] select-none">
         
         {/* Blurred backdrop background */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -59,33 +59,33 @@ export function HeroSection({ featured }: HeroSectionProps) {
               className="absolute inset-0 w-full h-full object-cover scale-125 blur-[40px] brightness-[0.7] origin-center transition-all duration-700 ease-in-out" 
             />
           )}
-          {/* Gradients to fade to white on the right and bottom */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-white dark:to-[#151618] to-[85%]" />
+          {/* Gradients to fade to white/dark on the right and bottom */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-white dark:to-[#151618] to-[90%] sm:to-[85%]" />
           <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#151618] via-white/45 dark:via-[#151618]/45 via-transparent to-transparent from-[0%] via-[12%] via-[40%]" />
         </div>
 
         {/* Content Container */}
-        <div className="relative h-full flex items-center justify-between p-8 md:p-10 z-10">
+        <div className="relative h-full flex items-center justify-between p-4 xs:p-6 sm:p-8 md:p-10 z-10">
           {/* Text content on the left */}
           <div 
             key={`text-${active.id}`}
-            className="flex-1 text-left flex flex-col justify-center h-full max-w-[60%] z-10 space-y-3 pb-8 animate-fade-up"
+            className="flex-1 text-left flex flex-col justify-center h-full max-w-[62%] sm:max-w-[60%] z-10 space-y-1.5 xs:space-y-2 sm:space-y-3 pb-5 sm:pb-8 animate-fade-up"
           >
-            <h1 className="text-2xl md:text-[34px] font-extrabold leading-[1.15] text-white tracking-tight drop-shadow-xs line-clamp-2">
+            <h1 className="text-base xs:text-xl sm:text-2xl md:text-[34px] font-extrabold leading-[1.18] text-white tracking-tight drop-shadow-xs line-clamp-2">
               {active.title}
             </h1>
 
-            <p className="text-white/80 text-[14px] font-medium tracking-wide">
+            <p className="text-white/85 text-xs sm:text-[14px] font-medium tracking-wide">
               {active.genre ?? "Manga"}
-              {active.chapter > 0 ? ` • Chapter ${active.chapter}` : ""}
+              {active.chapter > 0 ? ` • Ch. ${active.chapter}` : ""}
             </p>
 
-            <div className="pt-2">
+            <div className="pt-1 sm:pt-2">
               <Link
                 href={`/comic/${active.slug ?? active.id}`}
-                className="inline-flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white text-[14px] font-bold h-[42px] px-6 rounded-full border border-white/25 shadow-xs backdrop-blur-md transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 xs:gap-2 bg-white/20 hover:bg-white/30 text-white text-xs sm:text-[14px] font-bold h-8 xs:h-[38px] sm:h-[42px] px-3.5 xs:px-5 sm:px-6 rounded-full border border-white/25 shadow-xs backdrop-blur-md transition-all duration-200 hover:scale-[1.02] cursor-pointer"
               >
-                <BookOpen size={16} className="text-white" /> Baca Sekarang
+                <BookOpen size={14} className="text-white sm:w-4 sm:h-4" /> Baca Sekarang
               </Link>
             </div>
           </div>
@@ -93,22 +93,22 @@ export function HeroSection({ featured }: HeroSectionProps) {
           {/* Cover image on the right */}
           <div 
             key={`cover-${active.id}`}
-            className="w-[140px] sm:w-[160px] aspect-[3/4] rounded-xl overflow-hidden  shrink-0 shadow-[0_12px_28px_rgba(0,0,0,0.22)] z-10 animate-fade-up hover:scale-[1.02] transition-transform duration-300"
+            className="w-[90px] xs:w-[120px] sm:w-[140px] md:w-[160px] aspect-[3/4] rounded-lg sm:rounded-xl overflow-hidden shrink-0 shadow-[0_12px_28px_rgba(0,0,0,0.28)] z-10 animate-fade-up hover:scale-[1.02] transition-transform duration-300"
           >
             <HeroCover manga={active} />
           </div>
         </div>
 
         {/* Carousel dots at the bottom-left */}
-        <div className="absolute bottom-6 left-8 flex items-center gap-2 z-20">
+        <div className="absolute bottom-3 xs:bottom-4 sm:bottom-6 left-4 xs:left-6 sm:left-8 flex items-center gap-1.5 sm:gap-2 z-20">
           {slides.map((_, i) => (
             <button
               key={i}
               aria-label={`Tampilkan slide ${i + 1}`}
               onClick={() => setIndex(i)}
               className={cn(
-                "h-2 rounded-full transition-all duration-300 cursor-pointer",
-                i === index ? "w-6 bg-black" : "w-2 bg-black/20 hover:bg-black/40"
+                "h-1.5 sm:h-2 rounded-full transition-all duration-300 cursor-pointer",
+                i === index ? "w-5 sm:w-6 bg-white shadow-xs" : "w-1.5 sm:w-2 bg-white/40 hover:bg-white/60"
               )}
             />
           ))}

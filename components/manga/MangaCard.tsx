@@ -109,13 +109,13 @@ export function MangaCard({ manga, style }: MangaCardProps) {
             "absolute top-2 right-2 z-20 flex items-center justify-center w-7 h-7 rounded-full backdrop-blur-sm border transition-all duration-200",
             bookmarked
               ? "bg-[#ff6740] border-[#ff6740] text-white opacity-100"
-              : "bg-black/40 border-white/20 text-white opacity-0 group-hover:opacity-100 hover:bg-black/60"
+              : "bg-black/40 border-white/20 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 hover:bg-black/60"
           )}
         >
           <Bookmark size={13} className={cn(bookmarked && "fill-white")} />
         </button>
 
-        {/* Cover image — swap abstract cover with <Image> when API is ready */}
+        {/* Cover image */}
         {manga.coverUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -132,33 +132,33 @@ export function MangaCard({ manga, style }: MangaCardProps) {
 
         {/* Small flag badge bottom-right */}
         {manga.type && (
-          <div className="absolute bottom-2 right-2 z-10 bg-white/90 dark:bg-neutral-900/90 px-1.5 py-0.5 rounded text-[9px] font-extrabold shadow-sm flex items-center gap-1.5 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white select-none">
+          <div className="absolute bottom-2 right-2 z-10 bg-white/90 dark:bg-neutral-900/90 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-extrabold shadow-sm flex items-center gap-1 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white select-none">
             {manga.type === "Manga" && (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <img src="https://flagcdn.com/jp.svg" alt="jp" className="w-3 h-2 sm:w-3.5 sm:h-2.5 object-cover rounded-[1px]" />
                 <span>JP</span>
               </>
             )}
             {manga.type === "Manhwa" && (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <img src="https://flagcdn.com/kr.svg" alt="kr" className="w-3 h-2 sm:w-3.5 sm:h-2.5 object-cover rounded-[1px]" />
                 <span>KR</span>
               </>
             )}
             {manga.type === "Manhua" && (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3.5 h-2.5 object-cover rounded-[1px]" />
+                <img src="https://flagcdn.com/cn.svg" alt="cn" className="w-3 h-2 sm:w-3.5 sm:h-2.5 object-cover rounded-[1px]" />
                 <span>CN</span>
               </>
             )}
           </div>
         )}
 
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-white/85 dark:bg-neutral-900/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+        {/* Hover overlay (desktop only) */}
+        <div className="hidden sm:flex absolute inset-0 bg-white/85 dark:bg-neutral-900/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col justify-end p-4">
           <div className="space-y-2">
             {/* Title */}
             <h3 className="text-[13px] font-bold text-black dark:text-white line-clamp-2">
@@ -200,18 +200,18 @@ export function MangaCard({ manga, style }: MangaCardProps) {
 
       {/* Info */}
       <div>
-        <p className="text-[0.78rem] font-semibold text-neutral-900 dark:text-neutral-200 leading-tight truncate">
+        <p className="text-xs sm:text-[0.78rem] font-semibold text-neutral-900 dark:text-neutral-200 leading-snug line-clamp-2">
           {manga.title}
         </p>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[0.7rem] text-[#666] dark:text-neutral-400">
+        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 text-[10px] sm:text-[0.7rem] text-[#666] dark:text-neutral-400">
           {manga.type && (
-            <span className="text-[9px] font-bold bg-[#ffcb05]/15 text-[#bfa004] px-1.5 py-0.2 rounded-sm select-none shrink-0 font-mono">
+            <span className="text-[8px] sm:text-[9px] font-bold bg-[#ffcb05]/15 text-[#bfa004] px-1 py-0.2 rounded-sm select-none shrink-0 font-mono">
               {manga.type.toUpperCase()}
             </span>
           )}
           {manga.chapter > 0 && <span className="font-semibold shrink-0">Ch. {manga.chapter}</span>}
           {manga.author && (
-            <span className="truncate max-w-[80px]" title={manga.author}>
+            <span className="truncate max-w-[70px] sm:max-w-[80px]" title={manga.author}>
               • {manga.author.split(",")[0]}
             </span>
           )}

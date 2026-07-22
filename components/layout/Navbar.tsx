@@ -176,7 +176,7 @@ export function Navbar() {
               "flex items-center rounded-lg px-3 h-10 border transition-all duration-300 ease-in-out relative",
               "bg-gray-100/90 dark:bg-[#242527]/90 shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.25)]",
               showDropdown ? "border-[#ff6740] ring-1 ring-[#ff6740]" : "border-transparent",
-              isFocused || searchQuery ? "w-[180px] xs:w-[240px] sm:w-[360px] md:w-[480px]" : "w-[120px] xs:w-[150px] sm:w-[200px]"
+              isFocused || searchQuery ? "w-[140px] xs:w-[200px] sm:w-[360px] md:w-[480px]" : "w-[100px] xs:w-[130px] sm:w-[200px]"
             )}>
               <Search size={16} className="text-gray-400 mr-2 flex-shrink-0" />
               <input

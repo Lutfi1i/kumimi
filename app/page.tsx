@@ -52,7 +52,7 @@ export default function Home() {
 
       <div className="w-full bg-neutral-50 dark:bg-[#0f0f10] text-neutral-900 dark:text-neutral-100 min-h-screen transition-colors duration-200">
         {/* Main container with responsive padding */}
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 md:px-12 lg:px-[120px] py-8">
+        <div className="max-w-[1440px] mx-auto px-3.5 sm:px-8 md:px-12 lg:px-[120px] py-4 sm:py-8">
           {/* Hero Section */}
           <Suspense fallback={<HeroSectionSkeleton />}>
             <HeroSectionContent />
@@ -63,8 +63,8 @@ export default function Home() {
             <TrendingSeriesContent />
           </Suspense>
 
-          {/* Additional sections - simplified layout without sidebar */}
-          <div className="space-y-8">
+          {/* Additional sections */}
+          <div className="space-y-6 sm:space-y-8">
             <Suspense fallback={<MangaGridSkeleton title="Populer" count={21} />}>
               <GenreBrowseContent />
             </Suspense>
@@ -79,7 +79,7 @@ export default function Home() {
           </div>
 
           {/* Last promo section */}
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <FeaturedBanner />
           </div>
         </div>
